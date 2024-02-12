@@ -92,7 +92,7 @@ namespace cycling_project_web_api.Migrations
                     FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Nation = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Birthdate = table.Column<DateOnly>(type: "date", nullable: false),
+                    BirthDate = table.Column<DateOnly>(type: "date", nullable: false),
                     TeamId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>

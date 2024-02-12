@@ -8,7 +8,6 @@ namespace App.EntityModels;
 public class Rider
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id {get;set;}
 
     [StringLength(50)]
