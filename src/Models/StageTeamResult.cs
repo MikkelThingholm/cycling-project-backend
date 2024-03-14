@@ -6,7 +6,6 @@ namespace App.EntityModels;
 public class StageTeamResult
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     public int StageId { get; set; }
@@ -19,5 +18,8 @@ public class StageTeamResult
     public short Placement { get; set;}
     
     public int FinishTime { get; set;}
+
+    [Column(TypeName = "Int2")]
+    public short TimePenalty { get; set;}
 
 }

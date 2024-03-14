@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using App.EntityModels;
+using app.EntityModels;
 
 namespace DataAccess;
 
@@ -17,4 +18,6 @@ public class AppDbContext : DbContext{
     public DbSet<Team> Team { get; set; }
     public DbSet<StageIndividualResult> StageIndividualResult { get; set; }
     public DbSet<StageTeamResult> StageTeamResult { get; set; }
+    public DbSet<StageFinishStatus> StageFinishStatuses { get; set; }
+    public DbSet<RiderTeam> RiderTeams {get;set;}
 }

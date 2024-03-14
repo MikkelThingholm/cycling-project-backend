@@ -121,14 +121,38 @@ namespace cycling_project_web_api.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<int?>("TeamId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Riders");
+                });
+
+            modelBuilder.Entity("App.EntityModels.RiderTeam", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("End")
+                        .HasColumnType("date");
+
+                    b.Property<int>("RiderId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("Start")
+                        .HasColumnType("date");
+
+                    b.Property<int>("TeamId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RiderId");
+
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Riders");
+                    b.ToTable("RiderTeams");
                 });
 
             modelBuilder.Entity("App.EntityModels.Stage", b =>
@@ -142,8 +166,8 @@ namespace cycling_project_web_api.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<float>("Distance")
-                        .HasColumnType("NUMERIC(6,3)");
+                    b.Property<int>("Distance")
+                        .HasColumnType("integer");
 
                     b.Property<int>("RaceEditionId")
                         .HasColumnType("integer");
@@ -189,12 +213,17 @@ namespace cycling_project_web_api.Migrations
                     b.Property<short>("SprintPointObtained")
                         .HasColumnType("Int2");
 
+                    b.Property<int>("StageFinishStatusId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("StageId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RiderId");
+
+                    b.HasIndex("StageFinishStatusId");
 
                     b.HasIndex("StageId");
 
@@ -256,6 +285,24 @@ namespace cycling_project_web_api.Migrations
                     b.ToTable("Team");
                 });
 
+            modelBuilder.Entity("app.EntityModels.StageFinishStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StageFinishStatuses");
+                });
+
             modelBuilder.Entity("App.EntityModels.RaceEdition", b =>
                 {
                     b.HasOne("App.EntityModels.Race", "Race")
@@ -267,11 +314,23 @@ namespace cycling_project_web_api.Migrations
                     b.Navigation("Race");
                 });
 
-            modelBuilder.Entity("App.EntityModels.Rider", b =>
+            modelBuilder.Entity("App.EntityModels.RiderTeam", b =>
                 {
-                    b.HasOne("App.EntityModels.Team", null)
-                        .WithMany("Riders")
-                        .HasForeignKey("TeamId");
+                    b.HasOne("App.EntityModels.Rider", "Rider")
+                        .WithMany("RiderTeam")
+                        .HasForeignKey("RiderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.EntityModels.Team", "Team")
+                        .WithMany("RiderTeam")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rider");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("App.EntityModels.Stage", b =>
@@ -293,6 +352,12 @@ namespace cycling_project_web_api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("app.EntityModels.StageFinishStatus", "StageFinishStatus")
+                        .WithMany()
+                        .HasForeignKey("StageFinishStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("App.EntityModels.Stage", "Stage")
                         .WithMany()
                         .HasForeignKey("StageId")
@@ -302,6 +367,8 @@ namespace cycling_project_web_api.Migrations
                     b.Navigation("Rider");
 
                     b.Navigation("Stage");
+
+                    b.Navigation("StageFinishStatus");
                 });
 
             modelBuilder.Entity("App.EntityModels.StageTeamResult", b =>
@@ -339,9 +406,14 @@ namespace cycling_project_web_api.Migrations
                     b.Navigation("Teams");
                 });
 
+            modelBuilder.Entity("App.EntityModels.Rider", b =>
+                {
+                    b.Navigation("RiderTeam");
+                });
+
             modelBuilder.Entity("App.EntityModels.Team", b =>
                 {
-                    b.Navigation("Riders");
+                    b.Navigation("RiderTeam");
                 });
 #pragma warning restore 612, 618
         }

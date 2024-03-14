@@ -87,12 +87,12 @@ namespace cycling_project_web_api.Controllers
 
             List<Rider> riders = riderUpdateRequests.Select(i => i.ToEntity()).ToList();
 
-            foreach (var rider in riders)
+            /* foreach (var rider in riders)
             {
                 await _db.Riders.Update(rider);
             }
 
-            await _db.Riders.UpdateRange(riders);
+            await _db.Riders.UpdateRange(riders); */
 
             int affected = await _db.SaveChangesAsync();
 

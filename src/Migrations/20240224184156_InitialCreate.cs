@@ -39,6 +39,35 @@ namespace cycling_project_web_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Riders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Nation = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    BirthDate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Riders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StageFinishStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StageFinishStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Team",
                 columns: table => new
                 {
@@ -84,25 +113,31 @@ namespace cycling_project_web_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Riders",
+                name: "RiderTeams",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Nation = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    BirthDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    TeamId = table.Column<int>(type: "integer", nullable: true)
+                    RiderId = table.Column<int>(type: "integer", nullable: false),
+                    TeamId = table.Column<int>(type: "integer", nullable: false),
+                    Start = table.Column<DateOnly>(type: "date", nullable: false),
+                    End = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Riders", x => x.Id);
+                    table.PrimaryKey("PK_RiderTeams", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Riders_Team_TeamId",
+                        name: "FK_RiderTeams_Riders_RiderId",
+                        column: x => x.RiderId,
+                        principalTable: "Riders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RiderTeams_Team_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Team",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,7 +149,7 @@ namespace cycling_project_web_api.Migrations
                     RaceEditionId = table.Column<int>(type: "integer", nullable: false),
                     StageNumber = table.Column<short>(type: "Int2", nullable: false),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
-                    Distance = table.Column<float>(type: "numeric(6,3)", nullable: false),
+                    Distance = table.Column<int>(type: "integer", nullable: false),
                     StageType = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -140,7 +175,8 @@ namespace cycling_project_web_api.Migrations
                     FinishTime = table.Column<int>(type: "integer", nullable: false),
                     SprintPointObtained = table.Column<short>(type: "Int2", nullable: false),
                     ClimbingPointObtained = table.Column<short>(type: "Int2", nullable: false),
-                    BonusPointObtained = table.Column<short>(type: "Int2", nullable: false)
+                    BonusPointObtained = table.Column<short>(type: "Int2", nullable: false),
+                    StageFinishStatusId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -149,6 +185,12 @@ namespace cycling_project_web_api.Migrations
                         name: "FK_StageIndividualResult_Riders_RiderId",
                         column: x => x.RiderId,
                         principalTable: "Riders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StageIndividualResult_StageFinishStatuses_StageFinishStatus~",
+                        column: x => x.StageFinishStatusId,
+                        principalTable: "StageFinishStatuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -193,14 +235,24 @@ namespace cycling_project_web_api.Migrations
                 column: "RaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Riders_TeamId",
-                table: "Riders",
+                name: "IX_RiderTeams_RiderId",
+                table: "RiderTeams",
+                column: "RiderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RiderTeams_TeamId",
+                table: "RiderTeams",
                 column: "TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StageIndividualResult_RiderId",
                 table: "StageIndividualResult",
                 column: "RiderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StageIndividualResult_StageFinishStatusId",
+                table: "StageIndividualResult",
+                column: "StageFinishStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StageIndividualResult_StageId",
@@ -232,6 +284,9 @@ namespace cycling_project_web_api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "RiderTeams");
+
+            migrationBuilder.DropTable(
                 name: "StageIndividualResult");
 
             migrationBuilder.DropTable(
@@ -239,6 +294,9 @@ namespace cycling_project_web_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Riders");
+
+            migrationBuilder.DropTable(
+                name: "StageFinishStatuses");
 
             migrationBuilder.DropTable(
                 name: "Stages");

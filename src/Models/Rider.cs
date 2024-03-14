@@ -10,15 +10,17 @@ public class Rider
     [Key]
     public int Id {get;set;}
 
-    [StringLength(50)]
+    [MaxLength(100)]
     public string FirstName {get;set;} = null!;
 
-    [StringLength(50)]
+    [MaxLength(100)]
     public string LastName {get;set;} = null!;
 
-    [StringLength(50)]
-    public string Nation {get;set;} = null!;
+    public int NationId {get;set;}
+    public Nation Nation {get;set;} = null!;
     
     public DateOnly BirthDate {get;set;}
+
+    public ICollection<RiderTeam> RiderTeam { get;} = null!;
 
 }

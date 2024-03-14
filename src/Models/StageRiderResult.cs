@@ -1,13 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using app.EntityModels;
+using Microsoft.AspNetCore.SignalR;
 
 
 namespace App.EntityModels;
 
-public class StageIndividualResult
+public class StageRiderResult
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     public int StageId { get; set; }
@@ -29,5 +30,11 @@ public class StageIndividualResult
     
     [Column(TypeName = "Int2")]
     public short BonusPointObtained { get; set;}
+
+    [Column(TypeName = "Int2")]
+    public short TimePenalty { get; set;}
+
+    public int StageFinishStatusId {get;set;}
+    public StageFinishStatus StageFinishStatus {get;set;} = null!;
 
 }

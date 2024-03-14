@@ -7,7 +7,6 @@ namespace App.EntityModels;
 public class Stage
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     public int RaceEditionId { get; set; }
@@ -18,8 +17,7 @@ public class Stage
 
     public DateOnly Date { get; set; }
 
-    [Column(TypeName = "NUMERIC(6,3)")]
-    public float Distance { get; set; }
+    public int Distance { get; set; }
 
     [StringLength(50)]
     public string StageType { get; set;} = null!;
