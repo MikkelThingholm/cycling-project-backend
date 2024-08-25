@@ -8,7 +8,7 @@ public class Nation
     [Key]
     public int Id { get; set;}
 
-    [MaxLength(100)]
+    [StringLength(100)]
     public string Name { get; set;} = null!;
 
     public bool StillExists { get; set;}

@@ -1,14 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.SignalR;
 
 namespace App.EntityModels;
 
 public class RaceEdition
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     public int RaceId { get; set; }

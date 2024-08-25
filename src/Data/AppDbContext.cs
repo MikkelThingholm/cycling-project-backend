@@ -14,10 +14,12 @@ public class AppDbContext : DbContext{
     public DbSet<RaceEdition> RaceEditions { get; set; }
     public DbSet<Race> Races { get; set; }
     public DbSet<Stage> Stages { get; set; } 
-    public DbSet<MetaTeam> MetaTeam { get; set; }
-    public DbSet<Team> Team { get; set; }
-    public DbSet<StageIndividualResult> StageIndividualResult { get; set; }
-    public DbSet<StageTeamResult> StageTeamResult { get; set; }
+    public DbSet<MetaTeam> MetaTeams { get; set; }
+    public DbSet<Team> Teams { get; set; }
+    public DbSet<StageRiderResult> StageRiderResults { get; set; }
+    public DbSet<StageTeamResult> StageTeamResults { get; set; }
     public DbSet<StageFinishStatus> StageFinishStatuses { get; set; }
-    public DbSet<RiderTeam> RiderTeams {get;set;}
+    public DbSet<RiderTeam> RiderTeams { get; set;}
+    public DbSet<Nation> Nations { get; set;}
+
 }

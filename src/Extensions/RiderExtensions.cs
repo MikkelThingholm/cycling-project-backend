@@ -4,18 +4,22 @@ using App.EntityModels;
 
 namespace App.Extenstions;
 
-public static class EntityExtensions
+public static class DtoExtensions
 {
-
-
     public static RiderResponse ToDto(this Rider rider){
-        return new RiderResponse(
+        NationResponse? riderNation = null;
+        if (rider.Nation is not null)
+        {
+            riderNation = rider.Nation.ToDto() ;
+        }
+        RiderResponse riderResponse = new(
             Id: rider.Id,
             FirstName: rider.FirstName,
             LastName: rider.LastName,
-            Nation: rider.Nation,
-            BirthDate: rider.BirthDate
+            BirthDate: rider.BirthDate,
+            Nation: riderNation
         );
+        return riderResponse;
     }
 
 
@@ -24,7 +28,7 @@ public static class EntityExtensions
         return new Rider(){
             FirstName = riderCreateRequest.FirstName,
             LastName = riderCreateRequest.LastName,
-            Nation = riderCreateRequest.Nation,
+            NationId = riderCreateRequest.NationId,
             BirthDate = riderCreateRequest.BirthDate
         };
     }
@@ -33,8 +37,8 @@ public static class EntityExtensions
         return new Rider(){
             FirstName = riderUpdateRequest.FirstName,
             LastName = riderUpdateRequest.LastName,
-            Nation = riderUpdateRequest.Nation,
             BirthDate = riderUpdateRequest.BirthDate
         };
     }
 }
+

@@ -9,7 +9,7 @@ public class Team
     [Key]
     public int Id { get; set; }
 
-    [MaxLength(100)]
+    [StringLength(100)]
     public string Name { get; set; } = null!;
 
     [Column(TypeName = "Int2")]

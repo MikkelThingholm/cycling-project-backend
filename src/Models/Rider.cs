@@ -10,10 +10,10 @@ public class Rider
     [Key]
     public int Id {get;set;}
 
-    [MaxLength(100)]
+    [StringLength(100)]
     public string FirstName {get;set;} = null!;
 
-    [MaxLength(100)]
+    [StringLength(100)]
     public string LastName {get;set;} = null!;
 
     public int NationId {get;set;}
