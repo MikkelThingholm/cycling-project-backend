@@ -6,25 +6,47 @@ namespace App.Extenstions;
 
 public static class DtoExtensions
 {
-    public static RiderResponse ToDto(this Rider rider){
+    public static RiderResponse ToDto(this Rider riderEntiy)
+    {
         NationResponse? riderNation = null;
-        if (rider.Nation is not null)
+        if (riderEntiy.Nation is not null)
         {
-            riderNation = rider.Nation.ToDto() ;
+            riderNation = riderEntiy.Nation.ToDto() ;
         }
         RiderResponse riderResponse = new(
-            Id: rider.Id,
-            FirstName: rider.FirstName,
-            LastName: rider.LastName,
-            BirthDate: rider.BirthDate,
+            Id: riderEntiy.Id,
+            FirstName: riderEntiy.FirstName,
+            LastName: riderEntiy.LastName,
+            BirthDate: riderEntiy.BirthDate,
             Nation: riderNation
         );
         return riderResponse;
     }
 
+    public static RiderCreateResponse ToDtoCreate(this Rider riderEntity)
+    {
+        return new RiderCreateResponse(
+            Id: riderEntity.Id,
+            FirstName: riderEntity.FirstName,
+            LastName: riderEntity.LastName,
+            BirthDate: riderEntity.BirthDate,
+            NationId: riderEntity.NationId
+        );
+    }
 
+    public static RiderUpdateResponse ToDtoUpdate(this Rider riderEntity)
+    {
+        return new RiderUpdateResponse(
+            Id: riderEntity.Id,
+            FirstName: riderEntity.FirstName,
+            LastName: riderEntity.LastName,
+            BirthDate: riderEntity.BirthDate,
+            NationId: riderEntity.NationId
+        );
+    }
 
-    public static Rider ToEntity(this RiderCreateRequest riderCreateRequest){
+    public static Rider ToEntity(this RiderCreateRequest riderCreateRequest)
+    {
         return new Rider(){
             FirstName = riderCreateRequest.FirstName,
             LastName = riderCreateRequest.LastName,
@@ -32,13 +54,17 @@ public static class DtoExtensions
             BirthDate = riderCreateRequest.BirthDate
         };
     }
-
-    public static Rider ToEntity(this RiderUpdateRequest riderUpdateRequest){
+    
+    public static Rider ToEntity(this RiderUpdateRequest riderUpdateRequest, int id)
+    {
         return new Rider(){
+            Id = id,
             FirstName = riderUpdateRequest.FirstName,
             LastName = riderUpdateRequest.LastName,
+            NationId = riderUpdateRequest.NationId,
             BirthDate = riderUpdateRequest.BirthDate
         };
     }
+    
 }
 

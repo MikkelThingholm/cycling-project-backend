@@ -61,10 +61,10 @@ public class NationsController : ControllerBase
         return Ok();
     }
 
-    [HttpPut("{Id}")]
-    public async Task<ActionResult<NationResponse>> Post([FromRoute] int Id, [FromBody] NationPutRequest nation)
+    [HttpPut("{Id:int}")]
+    public async Task<ActionResult<NationResponse>> Post([FromRoute] int Id, [FromBody] NationUpdateRequest nationUpdate)
     {
-
+        /*
         int rowsAffected = await _db.Nations
                                     .Where(n => n.Id == Id)
                                     .ExecuteUpdateAsync(updates =>
@@ -75,8 +75,17 @@ public class NationsController : ControllerBase
         if (rowsAffected == 0) {
             return NotFound();
         }
+        */
+        Nation? nation = await _db.Nations.FirstOrDefaultAsync(nation => nation.Id == Id);
 
-        return Ok(new NationResponse(Id:Id,Name:nation.Name,StillExists:nation.StillExists));
+        if (nation is null) 
+        { 
+            return NotFound();
+        }
+
+        _db.Entry(nation).CurrentValues.SetValues(nationUpdate.ToEntity(Id));
+        await _db.SaveChangesAsync();
+        return Ok(nation.ToDto());
     }
 
 }

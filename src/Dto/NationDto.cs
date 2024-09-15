@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace App.Dto;
 
 public record NationResponse(
@@ -7,11 +9,11 @@ public record NationResponse(
 );
 
 public record NationCreateRequest(
-    string Name,
+    string  Name,
     bool StillExists
 );
 
-public record NationPutRequest(
+public record NationUpdateRequest(
     string Name,
     bool StillExists
 );

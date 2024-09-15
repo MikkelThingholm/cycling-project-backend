@@ -24,5 +24,14 @@ public static class NationDtoExtensions
         };
     }
 
+    public static Nation ToEntity(this NationUpdateRequest nation, int id)
+    {
+        return new Nation(){
+            Id = id,
+            Name = nation.Name,
+            StillExists= nation.StillExists
+        };
+    }
+
 }
 
