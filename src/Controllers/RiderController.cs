@@ -75,7 +75,7 @@ public class RiderController : ControllerBase
     [HttpDelete("{Id:int}")]
     public async Task<ActionResult<RiderResponse>> Delete([FromRoute]int Id)
     {
-
+        
         _db.Riders.Remove(new(){Id=Id});
 
         try
@@ -88,6 +88,7 @@ public class RiderController : ControllerBase
         }
         
         return NoContent();
+        
     }
 
     

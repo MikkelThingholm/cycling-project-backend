@@ -62,14 +62,14 @@ public class NationsController : ControllerBase
     }
 
     [HttpPut("{Id:int}")]
-    public async Task<ActionResult<NationResponse>> Post([FromRoute] int Id, [FromBody] NationUpdateRequest nationUpdate)
+    public async Task<ActionResult<NationResponse>> Put([FromRoute] int Id, [FromBody] NationUpdateRequest nationUpdate)
     {
         /*
         int rowsAffected = await _db.Nations
-                                    .Where(n => n.Id == Id)
-                                    .ExecuteUpdateAsync(updates =>
-                                        updates.SetProperty(n => n.Name, nation.Name)
-                                               .SetProperty(n => n.StillExists, nation.StillExists)  
+            .Where(n => n.Id == Id)
+            .ExecuteUpdateAsync(updates =>
+                updates.SetProperty(n => n.Name, nation.Name)
+                       .SetProperty(n => n.StillExists, nation.StillExists)  
         );
 
         if (rowsAffected == 0) {

@@ -1,26 +1,19 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-
-
 namespace App.EntityModels;
 
 public class Rider
 {
-    [Key]
-    public int Id {get;set;}
 
-    [StringLength(100)]
-    public string FirstName {get;set;} = null!;
+    public int Id { get; set; }
 
-    [StringLength(100)]
-    public string LastName {get;set;} = null!;
+    public string FirstName { get; set; } = null!;
 
-    public int NationId {get;set;}
-    public Nation Nation {get;set;} = null!;
-    
-    public DateOnly BirthDate {get;set;}
+    public string LastName { get; set; } = null!;
 
-    public ICollection<RiderTeam> RiderTeam { get;} = null!;
+    public int NationId { get; set; }
+    public Nation Nation { get; set; } = null!;
+
+    public DateOnly BirthDate { get; set; }
+
+    public ICollection<RiderTeam> RiderTeam { get; } = null!;
 
 }

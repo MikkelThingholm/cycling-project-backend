@@ -15,8 +15,9 @@ public record RiderResponse(
 );
 
 
-public record RiderCreateRequest{
-    public required string FirstName { get; set;}
+public record RiderCreateRequest
+{
+    public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required int NationId { get; set; }
     public required DateOnly BirthDate { get; set; }

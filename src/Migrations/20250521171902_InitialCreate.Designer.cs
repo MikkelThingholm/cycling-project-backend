@@ -3,6 +3,7 @@ using System;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace cycling_project_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250521171902_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,9 +181,6 @@ namespace cycling_project_web_api.Migrations
                     b.HasAlternateKey("Name")
                         .HasName("ak_races_name");
 
-                    b.HasIndex("NationId")
-                        .HasDatabaseName("ix_races_nation_id");
-
                     b.ToTable("races", (string)null);
                 });
 
@@ -247,9 +247,6 @@ namespace cycling_project_web_api.Migrations
                     b.HasAlternateKey("RaceTeamParticipationId", "RiderId")
                         .HasName("ak_race_rider_participations_race_team_participation_id_rider_");
 
-                    b.HasIndex("RiderId")
-                        .HasDatabaseName("ix_race_rider_participations_rider_id");
-
                     b.ToTable("race_rider_participations", (string)null);
                 });
 
@@ -275,9 +272,6 @@ namespace cycling_project_web_api.Migrations
 
                     b.HasAlternateKey("RaceEditionId", "TeamId")
                         .HasName("ak_race_team_participations_race_edition_id_team_id");
-
-                    b.HasIndex("TeamId")
-                        .HasDatabaseName("ix_race_team_participations_team_id");
 
                     b.ToTable("race_team_participations", (string)null);
                 });
@@ -465,9 +459,10 @@ namespace cycling_project_web_api.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("stage_number");
 
-                    b.Property<int>("StageTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("stage_type_id");
+                    b.Property<string>("StageType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("stage_type");
 
                     b.Property<string>("StartLocation")
                         .IsRequired()
@@ -480,9 +475,6 @@ namespace cycling_project_web_api.Migrations
 
                     b.HasAlternateKey("RaceEditionId", "StageNumber")
                         .HasName("ak_stages_race_edition_id_stage_number");
-
-                    b.HasIndex("StageTypeId")
-                        .HasDatabaseName("ix_stages_stage_type_id");
 
                     b.ToTable("stages", (string)null);
                 });
@@ -507,12 +499,8 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_combative_awards");
 
-                    b.HasIndex("RaceRiderParticipationId")
-                        .HasDatabaseName("ix_stage_combative_awards_race_rider_participation_id");
-
-                    b.HasIndex("StageId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_stage_combative_awards_stage_id");
+                    b.HasAlternateKey("StageId")
+                        .HasName("ak_stage_combative_awards_stage_id");
 
                     b.ToTable("stage_combative_awards", (string)null);
                 });
@@ -539,9 +527,6 @@ namespace cycling_project_web_api.Migrations
 
                     b.HasAlternateKey("StageId", "RaceRiderParticipationId")
                         .HasName("ak_stage_did_not_starts_stage_id_race_rider_participation_id");
-
-                    b.HasIndex("RaceRiderParticipationId")
-                        .HasDatabaseName("ix_stage_did_not_starts_race_rider_participation_id");
 
                     b.ToTable("stage_did_not_starts", (string)null);
                 });
@@ -618,9 +603,6 @@ namespace cycling_project_web_api.Migrations
                     b.HasAlternateKey("StageId", "RaceRiderParticipationId")
                         .HasName("ak_stage_rider_results_stage_id_race_rider_participation_id");
 
-                    b.HasIndex("RaceRiderParticipationId")
-                        .HasDatabaseName("ix_stage_rider_results_race_rider_participation_id");
-
                     b.HasIndex("StageResultStatusCodeId")
                         .HasDatabaseName("ix_stage_rider_results_stage_result_status_code_id");
 
@@ -677,9 +659,6 @@ namespace cycling_project_web_api.Migrations
 
                     b.HasAlternateKey("StageId", "RaceRiderParticipationId")
                         .HasName("ak_stage_rider_standings_stage_id_race_rider_participation_id");
-
-                    b.HasIndex("RaceRiderParticipationId")
-                        .HasDatabaseName("ix_stage_rider_standings_race_rider_participation_id");
 
                     b.ToTable("stage_rider_standings", (string)null);
                 });
@@ -771,9 +750,6 @@ namespace cycling_project_web_api.Migrations
 
                     b.HasAlternateKey("StageId", "RaceTeamParticipationId")
                         .HasName("ak_stage_team_standings_stage_id_race_team_participation_id");
-
-                    b.HasIndex("RaceTeamParticipationId")
-                        .HasDatabaseName("ix_stage_team_standings_race_team_participation_id");
 
                     b.ToTable("stage_team_standings", (string)null);
                 });
@@ -919,18 +895,6 @@ namespace cycling_project_web_api.Migrations
                     b.Navigation("MountainClimb");
                 });
 
-            modelBuilder.Entity("App.EntityModels.Race", b =>
-                {
-                    b.HasOne("App.EntityModels.Nation", "Nation")
-                        .WithMany()
-                        .HasForeignKey("NationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_races_nations_nation_id");
-
-                    b.Navigation("Nation");
-                });
-
             modelBuilder.Entity("App.EntityModels.RaceEdition", b =>
                 {
                     b.HasOne("App.EntityModels.Race", "Race")
@@ -945,44 +909,12 @@ namespace cycling_project_web_api.Migrations
 
             modelBuilder.Entity("App.EntityModels.RaceRiderParticipation", b =>
                 {
-                    b.HasOne("App.EntityModels.RaceTeamParticipation", "RaceTeamParticipation")
+                    b.HasOne("App.EntityModels.RaceTeamParticipation", null)
                         .WithMany("RaceRiderParticipations")
                         .HasForeignKey("RaceTeamParticipationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_race_rider_participations_race_team_participations_race_tea");
-
-                    b.HasOne("App.EntityModels.Rider", "Rider")
-                        .WithMany()
-                        .HasForeignKey("RiderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_race_rider_participations_riders_rider_id");
-
-                    b.Navigation("RaceTeamParticipation");
-
-                    b.Navigation("Rider");
-                });
-
-            modelBuilder.Entity("App.EntityModels.RaceTeamParticipation", b =>
-                {
-                    b.HasOne("App.EntityModels.RaceEdition", "RaceEdition")
-                        .WithMany()
-                        .HasForeignKey("RaceEditionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_race_team_participations_race_editions_race_edition_id");
-
-                    b.HasOne("App.EntityModels.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_race_team_participations_teams_team_id");
-
-                    b.Navigation("RaceEdition");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("App.EntityModels.Rider", b =>
@@ -1060,69 +992,11 @@ namespace cycling_project_web_api.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_stages_race_editions_race_edition_id");
 
-                    b.HasOne("App.EntityModels.StageType", "StageType")
-                        .WithMany()
-                        .HasForeignKey("StageTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stages_stage_types_stage_type_id");
-
                     b.Navigation("RaceEdition");
-
-                    b.Navigation("StageType");
-                });
-
-            modelBuilder.Entity("App.EntityModels.StageCombativeAward", b =>
-                {
-                    b.HasOne("App.EntityModels.RaceRiderParticipation", "RaceRiderParticipation")
-                        .WithMany()
-                        .HasForeignKey("RaceRiderParticipationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stage_combative_awards_race_rider_participations_race_rider");
-
-                    b.HasOne("App.EntityModels.Stage", "Stage")
-                        .WithMany()
-                        .HasForeignKey("StageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stage_combative_awards_stages_stage_id");
-
-                    b.Navigation("RaceRiderParticipation");
-
-                    b.Navigation("Stage");
-                });
-
-            modelBuilder.Entity("App.EntityModels.StageDidNotStart", b =>
-                {
-                    b.HasOne("App.EntityModels.RaceRiderParticipation", "RaceRiderParticipation")
-                        .WithMany()
-                        .HasForeignKey("RaceRiderParticipationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stage_did_not_starts_race_rider_participations_race_rider_p");
-
-                    b.HasOne("App.EntityModels.Stage", "Stage")
-                        .WithMany()
-                        .HasForeignKey("StageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stage_did_not_starts_stages_stage_id");
-
-                    b.Navigation("RaceRiderParticipation");
-
-                    b.Navigation("Stage");
                 });
 
             modelBuilder.Entity("App.EntityModels.StageRiderResult", b =>
                 {
-                    b.HasOne("App.EntityModels.RaceRiderParticipation", "RaceRiderParticipation")
-                        .WithMany()
-                        .HasForeignKey("RaceRiderParticipationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stage_rider_results_race_rider_participations_race_rider_pa");
-
                     b.HasOne("App.EntityModels.Stage", "Stage")
                         .WithMany("StageRiderResults")
                         .HasForeignKey("StageId")
@@ -1137,8 +1011,6 @@ namespace cycling_project_web_api.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_stage_rider_results_stage_result_status_codes_stage_result_");
 
-                    b.Navigation("RaceRiderParticipation");
-
                     b.Navigation("Stage");
 
                     b.Navigation("StageResultStatusCode");
@@ -1146,21 +1018,12 @@ namespace cycling_project_web_api.Migrations
 
             modelBuilder.Entity("App.EntityModels.StageRiderStanding", b =>
                 {
-                    b.HasOne("App.EntityModels.RaceRiderParticipation", "RaceRiderParticipation")
-                        .WithMany()
-                        .HasForeignKey("RaceRiderParticipationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stage_rider_standings_race_rider_participations_race_rider_");
-
                     b.HasOne("App.EntityModels.Stage", "Stage")
                         .WithMany()
                         .HasForeignKey("StageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_stage_rider_standings_stages_stage_id");
-
-                    b.Navigation("RaceRiderParticipation");
 
                     b.Navigation("Stage");
                 });
@@ -1188,21 +1051,12 @@ namespace cycling_project_web_api.Migrations
 
             modelBuilder.Entity("App.EntityModels.StageTeamStanding", b =>
                 {
-                    b.HasOne("App.EntityModels.RaceTeamParticipation", "RaceTeamParticipation")
-                        .WithMany()
-                        .HasForeignKey("RaceTeamParticipationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_stage_team_standings_race_team_participations_race_team_par");
-
                     b.HasOne("App.EntityModels.Stage", "Stage")
                         .WithMany()
                         .HasForeignKey("StageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_stage_team_standings_stages_stage_id");
-
-                    b.Navigation("RaceTeamParticipation");
 
                     b.Navigation("Stage");
                 });

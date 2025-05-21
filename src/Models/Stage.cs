@@ -1,24 +1,30 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace App.EntityModels;
 
 public class Stage
 {
-    [Key]
     public int Id { get; set; }
 
     public int RaceEditionId { get; set; }
-    public RaceEdition RaceEdition { get; set;} = null!;
+    public RaceEdition RaceEdition { get; set; } = null!;
 
-    [Column(TypeName = "Int2")]
     public short StageNumber { get; set; }
+
+    public string StartLocation { get; set; } = null!;
+    public string FinishLocation { get; set; } = null!;
 
     public DateOnly Date { get; set; }
 
-    public int Distance { get; set; }
+    public int DistanceMeters { get; set; }
 
-    [StringLength(50)]
-    public string StageType { get; set;} = null!;
+    public int StageTypeId { get; set; }
+    public StageType StageType { get; init; } = null!;
+
+
+    public ICollection<StageTeamResult> StageTeamResults { get; set; } = [];
+    public ICollection<StageRiderResult> StageRiderResults { get; set; } = [];
+    public ICollection<Sprint> Sprints { get; set; } = [];
+    public ICollection<MountainClimb> MountainClimbs { get; set; } = [];
+
 }

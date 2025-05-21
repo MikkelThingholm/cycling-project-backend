@@ -1,25 +1,17 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace App.EntityModels;
 
 public class StageTeamResult
 {
-    [Key]
     public int Id { get; set; }
 
     public int StageId { get; set; }
-    public Stage Stage { get; set;} = null!;
+    public Stage Stage { get; set; } = null!;
 
-    public int TeamId { get; set; }
-    public Team Team { get; set;} = null!;
+    public int RaceTeamParticipationId { get; set; }
+    public RaceTeamParticipation RaceTeamParticipation { get; set; } = null!;
 
-    [Column(TypeName = "Int2")]
-    public short Placement { get; set;}
-    
-    public int FinishTime { get; set;}
+    public short Placement { get; set; }
 
-    [Column(TypeName = "Int2")]
-    public short TimePenalty { get; set;}
+    public int FinishTimeMilliseconds { get; set; }
 
 }
