@@ -1,4 +1,4 @@
-exec_bash:
+bash-api:
 	docker exec -it dev-webapi bash
 
 attach:

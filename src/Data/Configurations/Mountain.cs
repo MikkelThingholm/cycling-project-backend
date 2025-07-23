@@ -12,7 +12,7 @@ public class MountainConfiguration : IEntityTypeConfiguration<Mountain>
 
         builder.Property(x => x.Name).HasMaxLength(256);
 
-        builder.HasAlternateKey(x => x.Name);
+        builder.HasIndex(x => x.Name).IsUnique();
 
     }
 }

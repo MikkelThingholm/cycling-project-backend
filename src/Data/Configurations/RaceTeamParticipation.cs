@@ -10,6 +10,6 @@ public class RaceTeamParticipationConfiguration : IEntityTypeConfiguration<RaceT
     {
         builder.ToTable("race_team_participations");
 
-        builder.HasAlternateKey(x => new { x.RaceEditionId, x.TeamId });
+        builder.HasIndex(x => new { x.RaceEditionId, x.TeamId }).IsUnique();
     }
 }

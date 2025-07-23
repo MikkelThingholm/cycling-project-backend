@@ -10,14 +10,9 @@ public class StageTeamStanding
     public int RaceTeamParticipationId { get; set; }
     public RaceTeamParticipation RaceTeamParticipation { get; init; } = null!;
 
+    public short Placement { get; set; }
     public int TimeMilliseconds { get; set; }
     public short TimePenaltySeconds { get; set; }
     public short BonusSeconds { get; set; }
-
-    public short SprintPoints { get; set; }
-    public short SprintPointsPenalty { get; set; }
-
-    public short MountainPoints { get; set; }
-    public short MountainPointsPenalty { get; set; }
 
 }

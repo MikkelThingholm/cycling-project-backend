@@ -40,8 +40,9 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_mountains");
 
-                    b.HasAlternateKey("Name")
-                        .HasName("ak_mountains_name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_mountains_name");
 
                     b.ToTable("mountains", (string)null);
                 });
@@ -117,12 +118,12 @@ namespace cycling_project_web_api.Migrations
                         .HasColumnName("placement");
 
                     b.HasKey("Id")
-                        .HasName("pk_mountain_climb_reults");
+                        .HasName("pk_mountain_climb_results");
 
                     b.HasIndex("MountainClimbId")
-                        .HasDatabaseName("ix_mountain_climb_reults_mountain_climb_id");
+                        .HasDatabaseName("ix_mountain_climb_results_mountain_climb_id");
 
-                    b.ToTable("mountain_climb_reults", (string)null);
+                    b.ToTable("mountain_climb_results", (string)null);
                 });
 
             modelBuilder.Entity("App.EntityModels.Nation", b =>
@@ -147,8 +148,9 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_nations");
 
-                    b.HasAlternateKey("Name")
-                        .HasName("ak_nations_name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_nations_name");
 
                     b.ToTable("nations", (string)null);
                 });
@@ -175,8 +177,9 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_races");
 
-                    b.HasAlternateKey("Name")
-                        .HasName("ak_races_name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_races_name");
 
                     b.HasIndex("NationId")
                         .HasDatabaseName("ix_races_nation_id");
@@ -218,8 +221,9 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_race_editions");
 
-                    b.HasAlternateKey("RaceId", "Year")
-                        .HasName("ak_race_editions_race_id_year");
+                    b.HasIndex("RaceId", "Year")
+                        .IsUnique()
+                        .HasDatabaseName("ix_race_editions_race_id_year");
 
                     b.ToTable("race_editions", (string)null);
                 });
@@ -244,11 +248,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_race_rider_participations");
 
-                    b.HasAlternateKey("RaceTeamParticipationId", "RiderId")
-                        .HasName("ak_race_rider_participations_race_team_participation_id_rider_");
-
                     b.HasIndex("RiderId")
                         .HasDatabaseName("ix_race_rider_participations_rider_id");
+
+                    b.HasIndex("RaceTeamParticipationId", "RiderId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_race_rider_participations_race_team_participation_id_rider_");
 
                     b.ToTable("race_rider_participations", (string)null);
                 });
@@ -273,11 +278,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_race_team_participations");
 
-                    b.HasAlternateKey("RaceEditionId", "TeamId")
-                        .HasName("ak_race_team_participations_race_edition_id_team_id");
-
                     b.HasIndex("TeamId")
                         .HasDatabaseName("ix_race_team_participations_team_id");
+
+                    b.HasIndex("RaceEditionId", "TeamId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_race_team_participations_race_edition_id_team_id");
 
                     b.ToTable("race_team_participations", (string)null);
                 });
@@ -425,11 +431,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_sprint_results");
 
-                    b.HasAlternateKey("SprintId", "RaceRiderParticipationId")
-                        .HasName("ak_sprint_results_sprint_id_race_rider_participation_id");
-
                     b.HasIndex("RaceRiderParticipationId")
                         .HasDatabaseName("ix_sprint_results_race_rider_participation_id");
+
+                    b.HasIndex("SprintId", "RaceRiderParticipationId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_sprint_results_sprint_id_race_rider_participation_id");
 
                     b.ToTable("sprint_results", (string)null);
                 });
@@ -478,11 +485,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stages");
 
-                    b.HasAlternateKey("RaceEditionId", "StageNumber")
-                        .HasName("ak_stages_race_edition_id_stage_number");
-
                     b.HasIndex("StageTypeId")
                         .HasDatabaseName("ix_stages_stage_type_id");
+
+                    b.HasIndex("RaceEditionId", "StageNumber")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stages_race_edition_id_stage_number");
 
                     b.ToTable("stages", (string)null);
                 });
@@ -510,9 +518,9 @@ namespace cycling_project_web_api.Migrations
                     b.HasIndex("RaceRiderParticipationId")
                         .HasDatabaseName("ix_stage_combative_awards_race_rider_participation_id");
 
-                    b.HasIndex("StageId")
+                    b.HasIndex("StageId", "RaceRiderParticipationId")
                         .IsUnique()
-                        .HasDatabaseName("ix_stage_combative_awards_stage_id");
+                        .HasDatabaseName("ix_stage_combative_awards_stage_id_race_rider_participation_id");
 
                     b.ToTable("stage_combative_awards", (string)null);
                 });
@@ -537,11 +545,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_did_not_starts");
 
-                    b.HasAlternateKey("StageId", "RaceRiderParticipationId")
-                        .HasName("ak_stage_did_not_starts_stage_id_race_rider_participation_id");
-
                     b.HasIndex("RaceRiderParticipationId")
                         .HasDatabaseName("ix_stage_did_not_starts_race_rider_participation_id");
+
+                    b.HasIndex("StageId", "RaceRiderParticipationId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_did_not_starts_stage_id_race_rider_participation_id");
 
                     b.ToTable("stage_did_not_starts", (string)null);
                 });
@@ -570,11 +579,13 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_result_status_codes");
 
-                    b.HasAlternateKey("Name")
-                        .HasName("ak_stage_result_status_codes_name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_result_status_codes_name");
 
-                    b.HasAlternateKey("NameAbbreviation")
-                        .HasName("ak_stage_result_status_codes_name_abbreviation");
+                    b.HasIndex("NameAbbreviation")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_result_status_codes_name_abbreviation");
 
                     b.ToTable("stage_result_status_codes", (string)null);
                 });
@@ -615,14 +626,15 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_rider_results");
 
-                    b.HasAlternateKey("StageId", "RaceRiderParticipationId")
-                        .HasName("ak_stage_rider_results_stage_id_race_rider_participation_id");
-
                     b.HasIndex("RaceRiderParticipationId")
                         .HasDatabaseName("ix_stage_rider_results_race_rider_participation_id");
 
                     b.HasIndex("StageResultStatusCodeId")
                         .HasDatabaseName("ix_stage_rider_results_stage_result_status_code_id");
+
+                    b.HasIndex("StageId", "RaceRiderParticipationId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_rider_results_stage_id_race_rider_participation_id");
 
                     b.ToTable("stage_rider_results", (string)null);
                 });
@@ -647,6 +659,10 @@ namespace cycling_project_web_api.Migrations
                     b.Property<short>("MountainPointsPenalty")
                         .HasColumnType("smallint")
                         .HasColumnName("mountain_points_penalty");
+
+                    b.Property<short>("Placement")
+                        .HasColumnType("smallint")
+                        .HasColumnName("placement");
 
                     b.Property<int>("RaceRiderParticipationId")
                         .HasColumnType("integer")
@@ -675,11 +691,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_rider_standings");
 
-                    b.HasAlternateKey("StageId", "RaceRiderParticipationId")
-                        .HasName("ak_stage_rider_standings_stage_id_race_rider_participation_id");
-
                     b.HasIndex("RaceRiderParticipationId")
                         .HasDatabaseName("ix_stage_rider_standings_race_rider_participation_id");
+
+                    b.HasIndex("StageId", "RaceRiderParticipationId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_rider_standings_stage_id_race_rider_participation_id");
 
                     b.ToTable("stage_rider_standings", (string)null);
                 });
@@ -712,11 +729,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_team_results");
 
-                    b.HasAlternateKey("StageId", "RaceTeamParticipationId")
-                        .HasName("ak_stage_team_results_stage_id_race_team_participation_id");
-
                     b.HasIndex("RaceTeamParticipationId")
                         .HasDatabaseName("ix_stage_team_results_race_team_participation_id");
+
+                    b.HasIndex("StageId", "RaceTeamParticipationId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_team_results_stage_id_race_team_participation_id");
 
                     b.ToTable("stage_team_results", (string)null);
                 });
@@ -734,25 +752,13 @@ namespace cycling_project_web_api.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("bonus_seconds");
 
-                    b.Property<short>("MountainPoints")
+                    b.Property<short>("Placement")
                         .HasColumnType("smallint")
-                        .HasColumnName("mountain_points");
-
-                    b.Property<short>("MountainPointsPenalty")
-                        .HasColumnType("smallint")
-                        .HasColumnName("mountain_points_penalty");
+                        .HasColumnName("placement");
 
                     b.Property<int>("RaceTeamParticipationId")
                         .HasColumnType("integer")
                         .HasColumnName("race_team_participation_id");
-
-                    b.Property<short>("SprintPoints")
-                        .HasColumnType("smallint")
-                        .HasColumnName("sprint_points");
-
-                    b.Property<short>("SprintPointsPenalty")
-                        .HasColumnType("smallint")
-                        .HasColumnName("sprint_points_penalty");
 
                     b.Property<int>("StageId")
                         .HasColumnType("integer")
@@ -769,11 +775,12 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_team_standings");
 
-                    b.HasAlternateKey("StageId", "RaceTeamParticipationId")
-                        .HasName("ak_stage_team_standings_stage_id_race_team_participation_id");
-
                     b.HasIndex("RaceTeamParticipationId")
                         .HasDatabaseName("ix_stage_team_standings_race_team_participation_id");
+
+                    b.HasIndex("StageId", "RaceTeamParticipationId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_team_standings_stage_id_race_team_participation_id");
 
                     b.ToTable("stage_team_standings", (string)null);
                 });
@@ -796,8 +803,9 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_stage_types");
 
-                    b.HasAlternateKey("Name")
-                        .HasName("ak_stage_types_name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_stage_types_name");
 
                     b.ToTable("stage_types", (string)null);
 
@@ -865,8 +873,9 @@ namespace cycling_project_web_api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_teams");
 
-                    b.HasAlternateKey("TeamOrganizationId", "Year")
-                        .HasName("ak_teams_team_organization_id_year");
+                    b.HasIndex("TeamOrganizationId", "Year")
+                        .IsUnique()
+                        .HasDatabaseName("ix_teams_team_organization_id_year");
 
                     b.ToTable("teams", (string)null);
                 });
@@ -914,7 +923,7 @@ namespace cycling_project_web_api.Migrations
                         .HasForeignKey("MountainClimbId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_mountain_climb_reults_mountain_climbs_mountain_climb_id");
+                        .HasConstraintName("fk_mountain_climb_results_race_mountain_climb_id");
 
                     b.Navigation("MountainClimb");
                 });

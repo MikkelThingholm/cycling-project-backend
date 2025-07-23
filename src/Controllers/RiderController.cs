@@ -2,81 +2,68 @@ using App.EntityModels;
 using Microsoft.AspNetCore.Mvc;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using App.Dto;
-using App.Extenstions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using App.Extensions;
 
-namespace cycling_project_web_api.Controllers;
+
+namespace App.Controllers;
 
 [ApiController]
-[Route("api/[controller]s")]
-public class RiderController : ControllerBase
+[Route("api/riders")]
+public class RiderController(ILogger<RiderController> logger, AppDbContext db) : ControllerBase
 {
 
-    private readonly ILogger<RiderController> _logger;
-    private readonly AppDbContext _db;
-
-    public RiderController(ILogger<RiderController> logger, AppDbContext db)
-    {
-        _logger = logger;
-        _db = db;
-    }
+    private readonly ILogger<RiderController> _logger = logger;
+    private readonly AppDbContext _db = db;
 
     [HttpPost]
-    public async Task<ActionResult<RiderCreateResponse>> Post([FromBody] RiderCreateRequest riderCreateRequests)
+    public async Task<ActionResult<RiderSimpleResponse>> CreateRider([FromBody] RiderCreateRequest riderCreateRequests)
     {
 
-        
+
         Rider riderEntity = riderCreateRequests.ToEntity();
 
         await _db.Riders.AddAsync(riderEntity);
 
-        int rowsAffected = await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync();
 
-        if (rowsAffected == 0) 
-        {
-            return BadRequest();
-        }
-
-        return Created(riderEntity.Id.ToString(), riderEntity.ToDtoCreate());
+        return CreatedAtAction(nameof(GetRiderById), new { id = riderEntity.Id }, riderEntity.ToResponseDto());
     }
 
-    [HttpGet("{Id}")]
-    public async Task<ActionResult<RiderResponse>> Get([FromRoute] int Id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<RiderResponse>> GetRiderById([FromRoute] int Id)
     {
         Rider? rider = await _db.Riders.Include(rider => rider.Nation)
                                 .FirstOrDefaultAsync(rider => rider.Id == Id);
 
-        if (rider is null) 
-        { 
+        if (rider is null)
+        {
             return NotFound();
         }
-   
-        return Ok(rider.ToDto());
+
+        return Ok(rider.ToResponseDto());
     }
-    
-    [HttpPut("{Id:int}")]
-    public async Task<ActionResult<RiderUpdateResponse>> Patch([FromRoute] int Id, [FromBody] RiderUpdateRequest riderUpdateRequest)
-    {
-        Rider? rider = await _db.Riders.FirstOrDefaultAsync(rider => rider.Id == Id);
 
-        if (rider is null) 
-        { 
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<RiderSimpleResponse>> UpdateRiderById([FromRoute] int id, [FromBody] RiderUpdateRequest riderUpdateRequest)
+    {
+        Rider? rider = await _db.Riders.FirstOrDefaultAsync(rider => rider.Id == id);
+
+        if (rider is null)
+        {
             return NotFound();
         }
 
-        _db.Entry(rider).CurrentValues.SetValues(riderUpdateRequest.ToEntity(Id));
+        _db.Entry(rider).CurrentValues.SetValues(riderUpdateRequest.ToEntity(id));
         await _db.SaveChangesAsync();
-        return Ok(rider.ToDtoUpdate());
+        return Ok(rider.ToUpdateResponseDto());
     }
-    
 
-    [HttpDelete("{Id:int}")]
-    public async Task<ActionResult<RiderResponse>> Delete([FromRoute]int Id)
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<RiderResponse>> Delete([FromRoute] int id)
     {
-        
-        _db.Riders.Remove(new(){Id=Id});
+        _db.Riders.Remove(new() { Id = id });
 
         try
         {
@@ -86,11 +73,12 @@ public class RiderController : ControllerBase
         {
             return NotFound();
         }
-        
+
+
         return NoContent();
-        
+
     }
 
-    
+
 }
 

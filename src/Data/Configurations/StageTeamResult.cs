@@ -10,6 +10,6 @@ public class StageTeamResultConfiguration : IEntityTypeConfiguration<StageTeamRe
     {
         builder.ToTable("stage_team_results");
 
-        builder.HasAlternateKey(x => new { x.StageId, x.RaceTeamParticipationId });
+        builder.HasIndex(x => new { x.StageId, x.RaceTeamParticipationId }).IsUnique();
     }
 }

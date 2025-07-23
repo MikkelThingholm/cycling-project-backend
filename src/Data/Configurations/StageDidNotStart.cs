@@ -10,6 +10,6 @@ public class StageDidNotStartConfiguration : IEntityTypeConfiguration<StageDidNo
     {
         builder.ToTable("stage_did_not_starts");
 
-        builder.HasAlternateKey(x => new { x.StageId, x.RaceRiderParticipationId });
+        builder.HasIndex(x => new { x.StageId, x.RaceRiderParticipationId }).IsUnique();
     }
 }

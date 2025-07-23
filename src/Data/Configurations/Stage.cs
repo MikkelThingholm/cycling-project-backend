@@ -13,7 +13,7 @@ public class StageConfiguration : IEntityTypeConfiguration<Stage>
         builder.Property(x => x.StartLocation).HasMaxLength(256);
         builder.Property(x => x.FinishLocation).HasMaxLength(256);
 
-        builder.HasAlternateKey(x => new { x.RaceEditionId, x.StageNumber });
+        builder.HasIndex(x => new { x.RaceEditionId, x.StageNumber }).IsUnique();
     }
 }
 

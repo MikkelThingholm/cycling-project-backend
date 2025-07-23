@@ -10,6 +10,6 @@ public class SprintResultConfiguration : IEntityTypeConfiguration<SprintResult>
     {
         builder.ToTable("sprint_results");
 
-        builder.HasAlternateKey(x => new { x.SprintId, x.RaceRiderParticipationId });
+        builder.HasIndex(x => new { x.SprintId, x.RaceRiderParticipationId }).IsUnique();
     }
 }

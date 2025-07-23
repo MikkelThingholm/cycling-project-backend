@@ -12,6 +12,6 @@ public class NationConfiguration : IEntityTypeConfiguration<Nation>
 
         builder.Property(n => n.Name).HasMaxLength(256);
 
-        builder.HasAlternateKey(n => n.Name);
+        builder.HasIndex(n => n.Name).IsUnique();
     }
 }

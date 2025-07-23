@@ -1,9 +1,3 @@
-
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
-using App.EntityModels;
-
 namespace App.Dto;
 
 public record RiderResponse(
@@ -11,35 +5,26 @@ public record RiderResponse(
     string FirstName,
     string LastName,
     DateOnly BirthDate,
-    NationResponse? Nation
+    NationResponse Nation,
+    ICollection<RiderTeamResponse> RiderTeam
 );
 
-
-public record RiderCreateRequest
-{
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
-    public required int NationId { get; set; }
-    public required DateOnly BirthDate { get; set; }
-}
-
-public record RiderCreateResponse(
+public record RiderSimpleResponse(
     int Id,
+    string FirstName,
+    string LastName,
+    DateOnly BirthDate,
+    int NationId
+);
+
+public record RiderCreateRequest(
     string FirstName,
     string LastName,
     int NationId,
     DateOnly BirthDate
 );
-
 
 public record RiderUpdateRequest(
-    string FirstName,
-    string LastName,
-    int NationId,
-    DateOnly BirthDate
-);
-public record RiderUpdateResponse(
-    int Id,
     string FirstName,
     string LastName,
     int NationId,

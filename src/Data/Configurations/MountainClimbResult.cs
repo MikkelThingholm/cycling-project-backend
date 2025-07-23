@@ -8,7 +8,6 @@ public class MountainClimbResultConfiguration : IEntityTypeConfiguration<Mountai
 {
     public void Configure(EntityTypeBuilder<MountainClimbResult> builder)
     {
-        builder.ToTable("mountain_climb_reults");
-
+        builder.ToTable("mountain_climb_results");
     }
 }

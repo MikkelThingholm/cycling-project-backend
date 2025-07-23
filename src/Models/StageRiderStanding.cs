@@ -10,6 +10,7 @@ public class StageRiderStanding
     public int RaceRiderParticipationId { get; set; }
     public RaceRiderParticipation RaceRiderParticipation { get; init; } = null!;
 
+    public short Placement { get; set; }
     public int TimeMilliseconds { get; set; }
     public short TimePenaltySeconds { get; set; }
     public short BonusSeconds { get; set; }

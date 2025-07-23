@@ -12,7 +12,7 @@ public class StageTypeConfiguration : IEntityTypeConfiguration<StageType>
 
         builder.Property(x => x.Name).HasMaxLength(64);
 
-        builder.HasAlternateKey(x => x.Name);
+        builder.HasIndex(x => x.Name).IsUnique();
 
         builder.HasData(
             new StageType { Id = 1, Name = "Flat" },

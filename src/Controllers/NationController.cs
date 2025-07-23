@@ -3,89 +3,72 @@ using Microsoft.AspNetCore.Mvc;
 using App.EntityModels;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
-using App.Extenstions;
+using App.Extensions;
 using System.Net;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 
-namespace cycling_project_web_api.Controllers;
+namespace App.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class NationsController : ControllerBase
+[Route("api/nations")]
+public class NationsController(ILogger<NationsController> logger, AppDbContext db) : ControllerBase
 {
-    private readonly ILogger<NationsController> _logger;
-    private readonly AppDbContext _db;
+    private readonly ILogger<NationsController> _logger = logger;
+    private readonly AppDbContext _db = db;
 
-    public NationsController(ILogger<NationsController> logger, AppDbContext db)
-    {
-        _logger = logger;
-        _db = db;
-    }
-
-    [HttpGet("{Id}")]
-    public async Task<ActionResult<NationResponse>> Get([FromRoute] int Id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<NationResponse>> Get([FromRoute] int id)
     {
 
-        var nation = await _db.Nations.FindAsync(Id);
+        var nation = await _db.Nations.FindAsync(id);
 
         if (nation is null)
         {
             return NotFound();
         }
-        return Ok(nation.ToDto());
+        return Ok(nation.ToResponse());
     }
 
     [HttpPost]
     public async Task<ActionResult<NationResponse>> Post([FromBody] NationCreateRequest nation)
     {
 
-        Nation nationEntity = nation.ToEntity();
+        Nation nationEntity = nation.ToNation();
         await _db.Nations.AddAsync(nationEntity);
 
-        int affected = await _db.SaveChangesAsync();
-
-
-        return Ok(nationEntity.ToDto());
-    }
-
-    [HttpDelete("{Id}")]
-    public async Task<ActionResult<NationResponse>> Post([FromRoute] int Id)
-    {
-
-        int rowsAffected = await _db.Nations.Where(nation => nation.Id == Id).ExecuteDeleteAsync();
-        
-        if (rowsAffected == 0) {
-            return NotFound();
-        }
-        
-        return Ok();
-    }
-
-    [HttpPut("{Id:int}")]
-    public async Task<ActionResult<NationResponse>> Put([FromRoute] int Id, [FromBody] NationUpdateRequest nationUpdate)
-    {
-        /*
-        int rowsAffected = await _db.Nations
-            .Where(n => n.Id == Id)
-            .ExecuteUpdateAsync(updates =>
-                updates.SetProperty(n => n.Name, nation.Name)
-                       .SetProperty(n => n.StillExists, nation.StillExists)  
-        );
-
-        if (rowsAffected == 0) {
-            return NotFound();
-        }
-        */
-        Nation? nation = await _db.Nations.FirstOrDefaultAsync(nation => nation.Id == Id);
-
-        if (nation is null) 
-        { 
-            return NotFound();
-        }
-
-        _db.Entry(nation).CurrentValues.SetValues(nationUpdate.ToEntity(Id));
         await _db.SaveChangesAsync();
-        return Ok(nation.ToDto());
+
+        return Ok(nationEntity.ToResponse());
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<NationResponse>> Post([FromRoute] int id)
+    {
+
+        int rowsAffected = await _db.Nations.Where(nation => nation.Id == id).ExecuteDeleteAsync();
+
+        if (rowsAffected == 0)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<NationResponse>> Put([FromRoute] int id, [FromBody] NationUpdateRequest nationUpdate)
+    {
+
+        Nation? nation = await _db.Nations.FirstOrDefaultAsync(nation => nation.Id == id);
+
+        if (nation is null)
+        {
+            return NotFound();
+        }
+
+        _db.Entry(nation).CurrentValues.SetValues(nationUpdate.ToNation(id));
+        await _db.SaveChangesAsync();
+        return Ok(nation.ToResponse());
     }
 
 }

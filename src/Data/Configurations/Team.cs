@@ -12,6 +12,6 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
 
         builder.Property(x => x.Name).HasMaxLength(256);
 
-        builder.HasAlternateKey(x => new { x.TeamOrganizationId, x.Year });
+        builder.HasIndex(x => new { x.TeamOrganizationId, x.Year }).IsUnique();
     }
 }

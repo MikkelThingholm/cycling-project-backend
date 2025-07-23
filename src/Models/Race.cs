@@ -1,4 +1,3 @@
-
 namespace App.EntityModels;
 
 public class Race

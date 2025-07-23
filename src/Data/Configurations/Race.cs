@@ -12,6 +12,6 @@ public class RaceConfiguration : IEntityTypeConfiguration<Race>
 
         builder.Property(r => r.Name).HasMaxLength(256);
 
-        builder.HasAlternateKey(r => r.Name);
+        builder.HasIndex(r => r.Name).IsUnique();
     }
 }

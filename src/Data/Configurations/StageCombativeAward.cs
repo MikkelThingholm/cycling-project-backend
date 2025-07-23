@@ -10,6 +10,6 @@ public class StageCombativeAwardConfiguration : IEntityTypeConfiguration<StageCo
     {
         builder.ToTable("stage_combative_awards");
 
-        builder.HasIndex(x => x.StageId).IsUnique();
+        builder.HasIndex(x => new { x.StageId, x.RaceRiderParticipationId }).IsUnique();
     }
 }

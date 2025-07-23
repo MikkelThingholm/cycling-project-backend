@@ -6,7 +6,7 @@ namespace DataAccess;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Mountain> Mountains { get; set; }
-    public DbSet<MountainClimb> MountainClimbs { get; set; }
+    public DbSet<MountainClimb> Race { get; set; }
     public DbSet<MountainClimbResult> MountainClimbResults { get; set; }
     public DbSet<Nation> Nations { get; set; }
     public DbSet<Race> Races { get; set; }

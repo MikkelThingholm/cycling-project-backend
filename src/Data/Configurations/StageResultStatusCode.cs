@@ -13,7 +13,7 @@ public class StageResultStatusCodeConfiguration : IEntityTypeConfiguration<Stage
         builder.Property(x => x.Name).HasMaxLength(64);
         builder.Property(x => x.NameAbbreviation).HasMaxLength(64);
 
-        builder.HasAlternateKey(x => x.Name);
-        builder.HasAlternateKey(x => x.NameAbbreviation);
+        builder.HasIndex(x => x.Name).IsUnique();
+        builder.HasIndex(x => x.NameAbbreviation).IsUnique();
     }
 }

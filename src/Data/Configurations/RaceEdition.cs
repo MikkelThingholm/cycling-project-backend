@@ -12,6 +12,6 @@ public class RaceEditionConfiguration : IEntityTypeConfiguration<RaceEdition>
 
         builder.Property(x => x.Name).HasMaxLength(256);
 
-        builder.HasAlternateKey(x => new { x.RaceId, x.Year });
+        builder.HasIndex(x => new { x.RaceId, x.Year }).IsUnique();
     }
 }

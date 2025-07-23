@@ -1,13 +1,11 @@
-
 using App.Dto;
 using App.EntityModels;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 
-namespace App.Extenstions;
+namespace App.Extensions;
 
 public static class NationDtoExtensions
 {
-    public static NationResponse ToDto(this Nation nation)
+    public static NationResponse ToResponse(this Nation nation)
     {
         return new NationResponse(
             Id: nation.Id,
@@ -16,20 +14,22 @@ public static class NationDtoExtensions
         );
     }
 
-    public static Nation ToEntity(this NationCreateRequest nation)
+    public static Nation ToNation(this NationCreateRequest nation)
     {
-        return new Nation(){
+        return new Nation()
+        {
             Name = nation.Name,
-            StillExists= nation.StillExists
+            StillExists = nation.StillExists
         };
     }
 
-    public static Nation ToEntity(this NationUpdateRequest nation, int id)
+    public static Nation ToNation(this NationUpdateRequest nation, int id)
     {
-        return new Nation(){
+        return new Nation()
+        {
             Id = id,
             Name = nation.Name,
-            StillExists= nation.StillExists
+            StillExists = nation.StillExists
         };
     }
 
