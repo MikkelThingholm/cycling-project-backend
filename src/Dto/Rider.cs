@@ -6,7 +6,7 @@ public record RiderResponse(
     string LastName,
     DateOnly BirthDate,
     NationResponse Nation,
-    ICollection<RiderTeamResponse> RiderTeam
+    List<RiderTeamResponse> RiderTeams
 );
 
 public record RiderSimpleResponse(

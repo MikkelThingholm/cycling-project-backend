@@ -1,6 +1,6 @@
 namespace App.EntityModels;
 
-public class StageCombativeAward
+public class StageCombativityAward
 {
     public int Id { get; set; }
 

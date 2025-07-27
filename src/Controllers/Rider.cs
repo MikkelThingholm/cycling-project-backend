@@ -1,6 +1,6 @@
 using App.EntityModels;
 using Microsoft.AspNetCore.Mvc;
-using DataAccess;
+using App.Data;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
 using App.Extensions;
@@ -54,9 +54,9 @@ public class RiderController(ILogger<RiderController> logger, AppDbContext db) :
             return NotFound();
         }
 
-        _db.Entry(rider).CurrentValues.SetValues(riderUpdateRequest.ToEntity(id));
+        rider.UpdateFromDto(riderUpdateRequest);
         await _db.SaveChangesAsync();
-        return Ok(rider.ToUpdateResponseDto());
+        return Ok(rider.ToSimpleResponseDto());
     }
 
 

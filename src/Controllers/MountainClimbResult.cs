@@ -7,23 +7,23 @@ using App.Extensions;
 
 
 namespace App.Controllers;
-
+/*
 [ApiController]
 [Route("api/mountain-climbs")]
-public class MountainClimbController(ILogger<MountainClimbController> logger, AppDbContext db) : ControllerBase
+public class MountainClimbResultController(ILogger<MountainClimbResultController> logger, AppDbContext db) : ControllerBase
 {
 
-    private readonly ILogger<MountainClimbController> _logger = logger;
+    private readonly ILogger<MountainClimbResultController> _logger = logger;
     private readonly AppDbContext _db = db;
 
     [HttpPost]
-    public async Task<ActionResult<MountainClimbSimpleResponse>> CreateMountainClimb([FromBody] MountainClimbCreateRequest mountainClimbCreateRequest)
+    public async Task<ActionResult<MountainClimbSimpleResponse>> CreateMountainClimbResult([FromBody] MountainClimbCreateRequest mountainClimbCreateRequest)
     {
 
 
         var mountainClimbEntity = mountainClimbCreateRequest.ToEntity();
 
-        await _db.MountainClimbs.AddAsync(mountainClimbEntity);
+        await _db.Race.AddAsync(mountainClimbEntity);
 
         await _db.SaveChangesAsync();
 
@@ -34,7 +34,7 @@ public class MountainClimbController(ILogger<MountainClimbController> logger, Ap
     public async Task<ActionResult<MountainClimbResponse>> GetMountainClimbById([FromRoute] int id)
     {
 
-        var mountainClimb = await _db.MountainClimbs.Include(mountainClimb => mountainClimb.Mountain)
+        var mountainClimb = await _db.Race.Include(mountainClimb => mountainClimb.Mountain)
                                 .Include(mountainClimb => mountainClimb.Stage)
                                 .FirstOrDefaultAsync(mountainClimb => mountainClimb.Id == id);
 
@@ -49,7 +49,7 @@ public class MountainClimbController(ILogger<MountainClimbController> logger, Ap
     [HttpPut("{id:int}")]
     public async Task<ActionResult<MountainClimbSimpleResponse>> UpdateMountainClimbById([FromRoute] int id, [FromBody] MountainClimbUpdateRequest mountainClimbUpdateRequest)
     {
-        MountainClimb? mountainClimb = await _db.MountainClimbs.FirstOrDefaultAsync(mountain => mountain.Id == id);
+        MountainClimb? mountainClimb = await _db.Race.FirstOrDefaultAsync(mountain => mountain.Id == id);
 
         if (mountainClimb is null)
         {
@@ -65,7 +65,7 @@ public class MountainClimbController(ILogger<MountainClimbController> logger, Ap
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<MountainClimbResponse>> DeleteMountainClimbById([FromRoute] int id)
     {
-        _db.MountainClimbs.Remove(new() { Id = id });
+        _db.Race.Remove(new() { Id = id });
 
         try
         {
@@ -79,5 +79,8 @@ public class MountainClimbController(ILogger<MountainClimbController> logger, Ap
         return NoContent();
     }
 
+
+
 }
 
+*/

@@ -2,7 +2,7 @@ namespace App.Dto;
 
 public record StageTeamStandingResponse(
     int Id,
-    int Placement,
+    short Placement,
     int TimeMilliseconds,
     short TimePenaltySeconds,
     short BonusSeconds,
@@ -12,7 +12,7 @@ public record StageTeamStandingResponse(
 
 public record StageTeamStandingSimpleResponse(
     int Id,
-    int Placement,
+    short Placement,
     int TimeMilliseconds,
     short TimePenaltySeconds,
     short BonusSeconds,
@@ -21,7 +21,7 @@ public record StageTeamStandingSimpleResponse(
 );
 
 public record StageTeamStandingCreateRequest(
-    int Placement,
+    short Placement,
     int TimeMilliseconds,
     short TimePenaltySeconds,
     short BonusSeconds,
@@ -30,7 +30,7 @@ public record StageTeamStandingCreateRequest(
 );
 
 public record StageTeamStandingUpdateRequest(
-    int Placement,
+    short Placement,
     int TimeMilliseconds,
     short TimePenaltySeconds,
     short BonusSeconds,

@@ -4,7 +4,7 @@ public record TeamResponse(
     int Id,
     string Name,
     short Year,
-    ICollection<RiderTeamResponse> RiderTeams,
+    List<RiderTeamResponse> RiderTeams,
     TeamOrganizationResponse TeamOrganization
 );
 
@@ -12,7 +12,6 @@ public record TeamSimpleResponse(
     int Id,
     string Name,
     short Year,
-    ICollection<RiderTeamResponse> RiderTeams,
     int TeamOrganizationId
 );
 

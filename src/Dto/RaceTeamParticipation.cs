@@ -2,16 +2,16 @@ namespace App.Dto;
 
 public record RaceTeamParticipationResponse(
     int Id,
-    RaceTeamParticipationSimpleResponse RaceTeamParticipation,
+    TeamResponse Team,
     RaceEditionSimpleResponse RaceEdition,
-    ICollection<RaceRiderParticipationSimpleResponse> RaceRiderParticipations
+    List<RaceRiderParticipationSimpleResponse> RaceRiderParticipations
 );
 
 public record RaceTeamParticipationSimpleResponse(
     int Id,
     int RaceEditionId,
     int TeamId,
-    ICollection<RaceRiderParticipationSimpleResponse> RaceRiderParticipations
+    List<RaceRiderParticipationSimpleResponse> RaceRiderParticipations
 );
 
 public record RaceTeamParticipationCreateRequest(

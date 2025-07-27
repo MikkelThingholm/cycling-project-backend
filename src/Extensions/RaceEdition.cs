@@ -14,7 +14,7 @@ public static class RaceEditionDtoExtension
             StartDate: raceEdition.StartDate,
             EndDate: raceEdition.EndDate,
             Race: raceEdition.Race.ToSimpleResponseDto(),
-            Stages: null
+            Stages: [.. raceEdition.Stages.Select(s => s.ToSimpleResponseDto())]
         );
     }
     public static RaceEditionSimpleResponse ToSimpleResponseDto(this RaceEdition raceEdition)

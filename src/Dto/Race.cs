@@ -4,7 +4,7 @@ public record RaceResponse(
     int Id,
     string Name,
     NationResponse Nation,
-    ICollection<RaceEditionResponse> RaceEditions
+    List<RaceEditionResponse> RaceEditions
 );
 
 public record RaceSimpleResponse(
@@ -12,7 +12,6 @@ public record RaceSimpleResponse(
     string Name,
     int NationId
 );
-
 
 public record RaceCreateRequest(
     string Name,

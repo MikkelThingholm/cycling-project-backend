@@ -10,7 +10,7 @@ public static class RaceDtoExtension
         return new RaceResponse(
             Id: race.Id,
             Name: race.Name,
-            Nation: race.Nation.ToResponse(),
+            Nation: race.Nation.ToResponseDto(),
             RaceEditions: null!
         );
     }
@@ -33,13 +33,10 @@ public static class RaceDtoExtension
         };
     }
 
-    public static Race ToEntity(this RaceUpdateRequest raceupdateRequest, int id)
+    public static void UpdateFromDto(this Race raceEntity, RaceUpdateRequest raceUpdateRequest)
     {
-        return new Race()
-        {
-            Id = id,
-            Name = raceupdateRequest.Name,
-            NationId = raceupdateRequest.NationId
-        };
+        raceEntity.Name = raceUpdateRequest.Name;
+        raceEntity.NationId = raceUpdateRequest.NationId;
     }
+
 }

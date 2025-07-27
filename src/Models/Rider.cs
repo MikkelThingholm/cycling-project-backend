@@ -14,6 +14,6 @@ public class Rider
 
     public DateOnly BirthDate { get; set; }
 
-    public ICollection<RiderTeam> RiderTeam { get; } = null!;
+    public ICollection<RiderTeam> RiderTeams { get; } = null!;
 
 }

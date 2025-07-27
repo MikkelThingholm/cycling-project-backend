@@ -1,12 +1,11 @@
 namespace App.Dto;
 
-//TODO: Add Stage and sprint Results
 public record SprintResponse(
     int Id,
     string Name,
     int DistanceFromStartMeters,
     bool IsFinish,
-    ICollection<SprintResultResponse> SprintResults,
+    List<SprintResultResponse> SprintResults,
     StageSimpleResponse Stage
 );
 

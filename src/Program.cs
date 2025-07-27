@@ -1,4 +1,7 @@
-using DataAccess;
+using App.Data;
+using App.Middleware;
+using App.Services;
+using App.Services.Interfaces;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,15 +16,18 @@ builder.Services.AddHttpLogging(logging =>
     logging.CombineLogs = true;
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
+
+builder.Services.AddScoped<IRaceEntryService, RaceEntryService>();
+
 
 var app = builder.Build();
 

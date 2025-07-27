@@ -1,6 +1,6 @@
 using App.EntityModels;
 using Microsoft.AspNetCore.Mvc;
-using DataAccess;
+using App.Data;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
 using App.Extensions;

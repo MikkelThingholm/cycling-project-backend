@@ -1,10 +1,9 @@
-
 using App.Dto;
 using App.EntityModels;
 
 namespace App.Extensions;
 
-public static class DtoExtensions
+public static class RiderDtoExtensions
 {
     public static RiderResponse ToResponseDto(this Rider riderEntity)
     {
@@ -14,13 +13,13 @@ public static class DtoExtensions
             FirstName: riderEntity.FirstName,
             LastName: riderEntity.LastName,
             BirthDate: riderEntity.BirthDate,
-            Nation: null!,
-            RiderTeam: null!
+            Nation: riderEntity.Nation.ToResponseDto(),
+            RiderTeams: [.. riderEntity.RiderTeams.Select(rt => rt.ToResponseDto())]
         );
         return riderResponse;
     }
 
-    public static RiderSimpleResponse ToCreateResponseDto(this Rider riderEntity)
+    public static RiderSimpleResponse ToSimpleResponseDto(this Rider riderEntity)
     {
         return new RiderSimpleResponse(
             Id: riderEntity.Id,
@@ -31,16 +30,6 @@ public static class DtoExtensions
         );
     }
 
-    public static RiderSimpleResponse ToUpdateResponseDto(this Rider riderEntity)
-    {
-        return new RiderSimpleResponse(
-            Id: riderEntity.Id,
-            FirstName: riderEntity.FirstName,
-            LastName: riderEntity.LastName,
-            BirthDate: riderEntity.BirthDate,
-            NationId: riderEntity.NationId
-        );
-    }
 
     public static Rider ToEntity(this RiderCreateRequest riderCreateRequest)
     {
@@ -53,16 +42,12 @@ public static class DtoExtensions
         };
     }
 
-    public static Rider ToEntity(this RiderUpdateRequest riderUpdateRequest, int id)
+    public static void UpdateFromDto(this Rider riderEntity, RiderUpdateRequest riderUpdateRequest)
     {
-        return new Rider()
-        {
-            Id = id,
-            FirstName = riderUpdateRequest.FirstName,
-            LastName = riderUpdateRequest.LastName,
-            NationId = riderUpdateRequest.NationId,
-            BirthDate = riderUpdateRequest.BirthDate
-        };
+        riderEntity.FirstName = riderUpdateRequest.FirstName;
+        riderEntity.LastName = riderUpdateRequest.LastName;
+        riderEntity.NationId = riderUpdateRequest.NationId;
+        riderEntity.BirthDate = riderUpdateRequest.BirthDate;
     }
 
 }

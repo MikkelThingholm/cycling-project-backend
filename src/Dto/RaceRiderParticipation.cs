@@ -12,8 +12,7 @@ public record RaceRiderParticipationSimpleResponse(
     int RiderId
 );
 
-public record RaceRiderParticipationCreateRequest(
-    int RaceTeamParticipationId,
+public record RiderRaceEntryCreateRequest(
     int RiderId
 );
 

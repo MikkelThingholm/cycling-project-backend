@@ -9,10 +9,10 @@ public record StageResponse(
     int DistanceMeters,
     RaceEditionSimpleResponse RaceEdition,
     StageTypeResponse StageType,
-    ICollection<SprintSimpleResponse> Sprints,
-    ICollection<MountainClimbSimpleResponse> MountainClimbs,
-    ICollection<StageTeamResultSimpleResponse> StageTeamResults,
-    ICollection<StageRiderResultSimpleResponse> StageRiderResults
+    List<SprintSimpleResponse> Sprints,
+    List<MountainClimbSimpleResponse> MountainClimbs,
+    List<StageTeamResultSimpleResponse> StageTeamResults,
+    List<StageRiderResultSimpleResponse> StageRiderResults
 );
 
 public record StageSimpleResponse(

@@ -1,6 +1,6 @@
 using App.EntityModels;
 using Microsoft.AspNetCore.Mvc;
-using DataAccess;
+using App.Data;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
 using App.Extensions;
@@ -55,7 +55,7 @@ public class MountainController(ILogger<MountainController> logger, AppDbContext
             return NotFound();
         }
 
-        _db.Entry(mountain).CurrentValues.SetValues(mountainUpdateRequest.ToEntity(id));
+        mountain.UpdateFromDto(mountainUpdateRequest);
         await _db.SaveChangesAsync();
         return Ok(mountain.ToResponseDto());
     }

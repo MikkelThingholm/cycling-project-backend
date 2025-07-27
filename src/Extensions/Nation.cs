@@ -5,7 +5,7 @@ namespace App.Extensions;
 
 public static class NationDtoExtensions
 {
-    public static NationResponse ToResponse(this Nation nation)
+    public static NationResponse ToResponseDto(this Nation nation)
     {
         return new NationResponse(
             Id: nation.Id,
@@ -14,7 +14,7 @@ public static class NationDtoExtensions
         );
     }
 
-    public static Nation ToNation(this NationCreateRequest nation)
+    public static Nation ToEntity(this NationCreateRequest nation)
     {
         return new Nation()
         {
@@ -23,14 +23,10 @@ public static class NationDtoExtensions
         };
     }
 
-    public static Nation ToNation(this NationUpdateRequest nation, int id)
+    public static void UpdateFromDto(this Nation nationEntity, NationUpdateRequest nationUpdateRequest)
     {
-        return new Nation()
-        {
-            Id = id,
-            Name = nation.Name,
-            StillExists = nation.StillExists
-        };
+        nationEntity.Name = nationUpdateRequest.Name;
+        nationEntity.StillExists = nationUpdateRequest.StillExists;
     }
 
 }

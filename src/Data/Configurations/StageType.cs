@@ -17,11 +17,12 @@ public class StageTypeConfiguration : IEntityTypeConfiguration<StageType>
         builder.HasData(
             new StageType { Id = 1, Name = "Flat" },
             new StageType { Id = 2, Name = "Hilly" },
-            new StageType { Id = 3, Name = "Mountain" },
-            new StageType { Id = 4, Name = "Individual time trial" },
-            new StageType { Id = 5, Name = "Team time trial" },
-            new StageType { Id = 6, Name = "Individual mountain time trial" },
-            new StageType { Id = 7, Name = "Cobblestone" }
+            new StageType { Id = 3, Name = "Medium mountain" },
+            new StageType { Id = 4, Name = "Mountain" },
+            new StageType { Id = 5, Name = "Individual time trial" },
+            new StageType { Id = 6, Name = "Team time trial" },
+            new StageType { Id = 7, Name = "Individual mountain time trial" },
+            new StageType { Id = 8, Name = "Cobblestone" }
         );
     }
 }

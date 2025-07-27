@@ -1,6 +1,6 @@
 using App.EntityModels;
 using Microsoft.AspNetCore.Mvc;
-using DataAccess;
+using App.Data;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
 using App.Extensions;
@@ -55,7 +55,7 @@ public class RaceController(ILogger<RaceController> logger, AppDbContext db) : C
             return NotFound();
         }
 
-        _db.Entry(raceEntity).CurrentValues.SetValues(raceUpdateRequest.ToEntity(id));
+        raceEntity.UpdateFromDto(raceUpdateRequest);
         await _db.SaveChangesAsync();
         return Ok(raceEntity.ToSimpleResponseDto());
     }
@@ -64,7 +64,7 @@ public class RaceController(ILogger<RaceController> logger, AppDbContext db) : C
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteRaceById([FromRoute] int id)
     {
-        _db.Race.Remove(new() { Id = id });
+        _db.Races.Remove(new() { Id = id });
 
         try
         {

@@ -10,7 +10,7 @@ public class MountainClimb
     public int StageId { get; set; }
     public Stage Stage { get; set; } = null!;
 
-    public int ClimbLengthMeter { get; set; }
+    public int ClimbLengthMeters { get; set; }
 
     public float AverageSlope { get; set; }
 

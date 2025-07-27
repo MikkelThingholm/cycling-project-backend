@@ -2,5 +2,9 @@ namespace App.Dto;
 
 public record TeamOrganizationResponse(
     int Id,
-    ICollection<TeamResponse> Teams
+    List<TeamResponse> Teams
+);
+
+public record TeamOrganizationSimpleResponse(
+    int Id
 );

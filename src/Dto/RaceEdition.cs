@@ -7,7 +7,7 @@ public record RaceEditionResponse(
     DateOnly StartDate,
     DateOnly EndDate,
     RaceSimpleResponse Race,
-    ICollection<StageSimpleResponse> Stages
+    List<StageSimpleResponse> Stages
 );
 
 public record RaceEditionSimpleResponse(

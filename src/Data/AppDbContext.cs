@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using App.EntityModels;
 
-namespace DataAccess;
+namespace App.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Mountain> Mountains { get; set; }
-    public DbSet<MountainClimb> Race { get; set; }
+    public DbSet<MountainClimb> MountainClimbs { get; set; }
     public DbSet<MountainClimbResult> MountainClimbResults { get; set; }
     public DbSet<Nation> Nations { get; set; }
     public DbSet<Race> Races { get; set; }
@@ -18,7 +18,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Sprint> Sprints { get; set; }
     public DbSet<SprintResult> SprintResults { get; set; }
     public DbSet<Stage> Stages { get; set; }
-    public DbSet<StageCombativeAward> StageCombativeAwards { get; set; }
+    public DbSet<StageCombativityAward> StageCombativeAwards { get; set; }
     public DbSet<StageDidNotStart> StageDidNotStart { get; set; }
     public DbSet<StageResultStatusCode> StageResultStatusCodes { get; set; }
     public DbSet<StageRiderResult> StageRiderResults { get; set; }

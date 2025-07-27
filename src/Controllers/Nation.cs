@@ -1,4 +1,4 @@
-using DataAccess;
+using App.Data;
 using Microsoft.AspNetCore.Mvc;
 using App.EntityModels;
 using Microsoft.EntityFrameworkCore;
@@ -26,19 +26,19 @@ public class NationsController(ILogger<NationsController> logger, AppDbContext d
         {
             return NotFound();
         }
-        return Ok(nation.ToResponse());
+        return Ok(nation.ToResponseDto());
     }
 
     [HttpPost]
     public async Task<ActionResult<NationResponse>> Post([FromBody] NationCreateRequest nation)
     {
 
-        Nation nationEntity = nation.ToNation();
+        Nation nationEntity = nation.ToEntity();
         await _db.Nations.AddAsync(nationEntity);
 
         await _db.SaveChangesAsync();
 
-        return Ok(nationEntity.ToResponse());
+        return Ok(nationEntity.ToResponseDto());
     }
 
     [HttpDelete("{id}")]
@@ -66,9 +66,9 @@ public class NationsController(ILogger<NationsController> logger, AppDbContext d
             return NotFound();
         }
 
-        _db.Entry(nation).CurrentValues.SetValues(nationUpdate.ToNation(id));
+        nation.UpdateFromDto(nationUpdate);
         await _db.SaveChangesAsync();
-        return Ok(nation.ToResponse());
+        return Ok(nation.ToResponseDto());
     }
 
 }

@@ -5,13 +5,3 @@ public record StageResultStatusCodeResponse(
     string Name,
     string NameAbbreviation
 );
-
-public record StageResultStatusCodeCreateRequest(
-    string Name,
-    string NameAbbreviation
-);
-
-public record StageResultStatusCodeUpdateRequest(
-    string Name,
-    string NameAbbreviation
-);

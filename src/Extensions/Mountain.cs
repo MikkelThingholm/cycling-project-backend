@@ -21,12 +21,8 @@ public static class MountainDtoExtension
         };
     }
 
-    public static Mountain ToEntity(this MountainUpdateRequest mountainupdateRequest, int id)
+    public static void UpdateFromDto(this Mountain mountainEntity, MountainUpdateRequest mountainUpdateRequest)
     {
-        return new Mountain()
-        {
-            Id = id,
-            Name = mountainupdateRequest.Name
-        };
+        mountainEntity.Name = mountainUpdateRequest.Name;
     }
 }

@@ -8,7 +8,7 @@ public class Team
 
     public short Year { get; set; }
 
-    public ICollection<RiderTeam> RiderTeam { get; } = [];
+    public ICollection<RiderTeam> RiderTeams { get; } = [];
 
     public int TeamOrganizationId { get; set; }
     public TeamOrganization TeamOrganization { get; } = null!;

@@ -9,8 +9,8 @@ public static class RaceRiderParticipationDtoExtension
     {
         return new RaceRiderParticipationResponse(
             Id: raceRiderParticipation.Id,
-            RaceTeamParticipation: null,
-            Rider: null
+            RaceTeamParticipation: raceRiderParticipation.RaceTeamParticipation.ToSimpleResponseDto(),
+            Rider: raceRiderParticipation.Rider.ToSimpleResponseDto()
         );
     }
     public static RaceRiderParticipationSimpleResponse ToSimpleResponseDto(this RaceRiderParticipation raceRiderParticipation)
@@ -21,7 +21,7 @@ public static class RaceRiderParticipationDtoExtension
             RiderId: raceRiderParticipation.RiderId
         );
     }
-
+    /*
     public static RaceRiderParticipation ToEntity(this RaceRiderParticipationCreateRequest raceRiderParticipationCreateRequest)
     {
         return new RaceRiderParticipation()
@@ -30,11 +30,11 @@ public static class RaceRiderParticipationDtoExtension
             RiderId = raceRiderParticipationCreateRequest.RiderId
         };
     }
-
-
+    
     public static void UpdateFromDto(this RaceRiderParticipation raceRiderParticipationEntity, RaceRiderParticipationUpdateRequest raceRiderParticipationUpdateRequest)
     {
         raceRiderParticipationEntity.RaceTeamParticipationId = raceRiderParticipationUpdateRequest.RaceTeamParticipationId;
         raceRiderParticipationEntity.RiderId = raceRiderParticipationUpdateRequest.RiderId;
     }
+    */
 }

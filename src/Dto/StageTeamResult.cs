@@ -2,7 +2,7 @@ namespace App.Dto;
 
 public record StageTeamResultResponse(
     int Id,
-    int Placement,
+    short Placement,
     int FinishTimeMilliseconds,
     StageSimpleResponse Stage,
     RaceTeamParticipationSimpleResponse RaceTeamParticipation
@@ -10,21 +10,21 @@ public record StageTeamResultResponse(
 
 public record StageTeamResultSimpleResponse(
     int Id,
-    int Placement,
+    short Placement,
     int FinishTimeMilliseconds,
     int StageId,
     int RaceTeamParticipationId
 );
 
 public record StageTeamResultCreateRequest(
-    int Placement,
+    short Placement,
     int FinishTimeMilliseconds,
     int StageId,
     int RaceTeamParticipationId
 );
 
 public record StageTeamResultUpdateRequest(
-    int Placement,
+    short Placement,
     int FinishTimeMilliseconds,
     int StageId,
     int RaceTeamParticipationId

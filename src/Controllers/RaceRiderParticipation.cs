@@ -1,6 +1,6 @@
 using App.EntityModels;
 using Microsoft.AspNetCore.Mvc;
-using DataAccess;
+using App.Data;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
 using App.Extensions;
@@ -12,7 +12,7 @@ namespace App.Controllers;
 [Route("api/races")]
 public class RaceRiderParticipationController(ILogger<RaceRiderParticipationController> logger, AppDbContext db) : ControllerBase
 {
-
+    /*
     private readonly ILogger<RaceRiderParticipationController> _logger = logger;
     private readonly AppDbContext _db = db;
 
@@ -78,7 +78,7 @@ public class RaceRiderParticipationController(ILogger<RaceRiderParticipationCont
         return NoContent();
     }
 
-
+    */
 
 }
 
