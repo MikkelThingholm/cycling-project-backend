@@ -19,15 +19,11 @@ public record RiderTeamSimpleResponse(
 
 public record RiderTeamCreateRequest(
     DateOnly JoinDate,
-    DateOnly LeaveDate,
-    int RiderId,
-    int TeamId
+    DateOnly LeaveDate
 );
 
 
 public record RiderTeamUpdateRequest(
     DateOnly JoinDate,
-    DateOnly LeaveDate,
-    int RiderId,
-    int TeamId
+    DateOnly LeaveDate
 );

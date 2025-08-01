@@ -14,7 +14,13 @@ public static class RiderDtoExtensions
             LastName: riderEntity.LastName,
             BirthDate: riderEntity.BirthDate,
             Nation: riderEntity.Nation.ToResponseDto(),
-            RiderTeams: [.. riderEntity.RiderTeams.Select(rt => rt.ToResponseDto())]
+            Teams: [.. riderEntity.RiderTeams.Select(rt => new RiderTeamDto(
+                TeamName: rt.Team.Name,
+                TeamOrganizationId: rt.Team.TeamOrganizationId,
+                TeamYear: rt.Team.Year,
+                JoinDate: rt.JoinDate,
+                LeaveDate: rt.LeaveDate
+            ))]
         );
         return riderResponse;
     }

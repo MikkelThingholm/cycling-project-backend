@@ -39,7 +39,6 @@ public static class TeamDtoExtensions
     public static void UpdateFromDto(this Team team, TeamUpdateRequest request)
     {
         team.Name = request.Name;
-        team.Year = request.Year;
         team.TeamOrganizationId = request.TeamOrganizationId;
     }
 

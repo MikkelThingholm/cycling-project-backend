@@ -4,37 +4,44 @@ using App.EntityModels;
 using App.Exceptions;
 using App.Extensions;
 using Microsoft.EntityFrameworkCore;
+using App.Services.Interfaces;
 
 namespace App.Services;
 
-public class RaceEditionManagementService(ILogger<RaceEditionManagementService> logger, AppDbContext db)
+public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db) : IRaceSetupService
 {
-    private readonly ILogger<RaceEditionManagementService> _logger = logger;
+    private readonly ILogger<RaceSetupService> _logger = logger;
     private readonly AppDbContext _db = db;
 
     // RaceEditions
 
+    private static void ValidateRaceEditionDates(short raceEditionYear, DateOnly startDate, DateOnly endDate)
+    {
+        if (raceEditionYear != startDate.Year || raceEditionYear != endDate.Year)
+        {
+            throw new BusinessRuleViolationException($"Race edition start and end dates {startDate} - {endDate} must be in the race edition year {raceEditionYear}");
+        }
+    }
+
     public async Task<RaceEditionSimpleResponse> CreateRaceEdition(RaceEditionCreateRequest raceEditionCreateRequest)
     {
         var raceEdition = raceEditionCreateRequest.ToEntity();
+
+        ValidateRaceEditionDates(raceEdition.Year, raceEdition.StartDate, raceEdition.EndDate);
+
         _db.RaceEditions.Add(raceEdition);
         await _db.SaveChangesAsync();
         return raceEdition.ToSimpleResponseDto();
     }
 
-    public async Task<RaceEditionResponse> GetRaceEditionById(int raceEditionId)
-    {
-        var raceEdition = await _db.RaceEditions.FindAsync(raceEditionId)
-            ?? throw new EntityNotFoundException(nameof(RaceEdition), raceEditionId);
 
-        return raceEdition.ToResponseDto();
-    }
-
-    public async Task<RaceEditionSimpleResponse> UpdateRaceEdition(int raceEditionId, RaceEditionUpdateRequest raceEditionUpdateRequest)
+    public async Task<RaceEditionSimpleResponse> UpdateRaceEdition(int id, RaceEditionUpdateRequest raceEditionUpdateRequest)
     {
         var raceEdition = await _db.RaceEditions.Include(re => re.Stages)
-                                .SingleOrDefaultAsync(re => re.Id == raceEditionId)
-                                ?? throw new EntityNotFoundException(nameof(RaceEdition), raceEditionId);
+                                .SingleOrDefaultAsync(re => re.Id == id)
+                                ?? throw new EntityNotFoundException(nameof(RaceEdition), id);
+
+        ValidateRaceEditionDates(raceEditionUpdateRequest.Year, raceEditionUpdateRequest.StartDate, raceEditionUpdateRequest.EndDate);
 
         if (!raceEdition.Stages.All(s => raceEditionUpdateRequest.StartDate <= s.Date && s.Date <= raceEditionUpdateRequest.EndDate))
         {
@@ -47,10 +54,10 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         return raceEdition.ToSimpleResponseDto();
     }
 
-    public async Task DeleteRaceEdition(int raceEditionId)
+    public async Task DeleteRaceEditionById(int id)
     {
-        var raceEdition = await _db.RaceEditions.FindAsync(raceEditionId)
-            ?? throw new EntityNotFoundException(nameof(RaceEdition), raceEditionId);
+        var raceEdition = await _db.RaceEditions.FindAsync(id)
+            ?? throw new EntityNotFoundException(nameof(RaceEdition), id);
 
         _db.RaceEditions.Remove(raceEdition);
         await _db.SaveChangesAsync();
@@ -76,13 +83,24 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         return stage.ToSimpleResponseDto();
     }
 
-    public async Task<StageSimpleResponse> UpdateStage(int id, StageUpdateRequest stageUpdateRequest)
+    public async Task<Stage> GetStageById(int id)
     {
         var stage = await _db.Stages.Include(s => s.RaceEdition)
                             .Include(s => s.Sprints)
                             .Include(s => s.MountainClimbs)
                             .SingleOrDefaultAsync(s => s.Id == id)
-                            ?? throw new EntityNotFoundException(nameof(Stage), id);
+            ?? throw new EntityNotFoundException(nameof(Stage), id);
+
+        return stage;
+    }
+
+    public async Task<StageSimpleResponse> UpdateStage(int raceEditionId, int stageNum, StageUpdateRequest stageUpdateRequest)
+    {
+        var stage = await _db.Stages.Include(s => s.RaceEdition)
+                            .Include(s => s.Sprints)
+                            .Include(s => s.MountainClimbs)
+                            .SingleOrDefaultAsync(s => s.RaceEditionId == raceEditionId && s.StageNumber == stageNum)
+                            ?? throw new EntityNotFoundException(nameof(Stage), new { raceEditionId, stageNum });
 
         if (!(stage.RaceEdition.StartDate <= stageUpdateRequest.Date && stageUpdateRequest.Date <= stage.RaceEdition.EndDate))
         {
@@ -93,7 +111,7 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         {
             throw new BusinessRuleViolationException($"Stage distance {stageUpdateRequest.DistanceMeters} must be greater than all Sprints");
         }
-        if (!stage.MountainClimbs.All(mc => mc.DistanceFromStartMeters <= stageUpdateRequest.DistanceMeters))
+        if (!stage.MountainClimbs.All(mc => mc.DistanceFromStartMeter <= stageUpdateRequest.DistanceMeters))
         {
             throw new BusinessRuleViolationException($"Stage distance {stageUpdateRequest.DistanceMeters} must be greater than all Mountain Climbs");
         }
@@ -104,9 +122,10 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         return stage.ToSimpleResponseDto();
     }
 
-    public async Task DeleteStage(int stageId)
+    public async Task DeleteStageById(int raceEditionId, int stageNum)
     {
-        var stage = await _db.Stages.FindAsync(stageId) ?? throw new EntityNotFoundException(nameof(Stage), stageId);
+        var stage = await _db.Stages.SingleOrDefaultAsync(s => s.StageNumber == stageNum && s.RaceEditionId == raceEditionId)
+                              ?? throw new EntityNotFoundException(nameof(Stage), new { raceEditionId, stageNum });
         _db.Stages.Remove(stage);
         await _db.SaveChangesAsync();
     }
@@ -121,14 +140,22 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         var stage = await _db.Stages.FindAsync(mountainClimb.StageId)
             ?? throw new EntityNotFoundException(nameof(Stage), mountainClimb.StageId);
 
-        if (!(0 < mountainClimb.DistanceFromStartMeters && mountainClimb.DistanceFromStartMeters <= stage.DistanceMeters))
+        if (!(0 < mountainClimb.DistanceFromStartMeter && mountainClimb.DistanceFromStartMeter <= stage.DistanceMeters))
         {
-            throw new BusinessRuleViolationException($"Mountain climb distance {mountainClimb.DistanceFromStartMeters} must be between 0 and stage distance {stage.DistanceMeters}");
+            throw new BusinessRuleViolationException($"Mountain climb distance {mountainClimb.DistanceFromStartMeter} must be between 0 and stage distance {stage.DistanceMeters}");
         }
 
         _db.MountainClimbs.Add(mountainClimb);
         await _db.SaveChangesAsync();
         return mountainClimb.ToSimpleResponseDto();
+    }
+
+    public async Task<MountainClimb> GetMountainClimbById(int id)
+    {
+        var mountainClimb = await _db.MountainClimbs.Include(mc => mc.Stage)
+            .SingleOrDefaultAsync(mc => mc.Id == id) ?? throw new EntityNotFoundException(nameof(MountainClimb), id);
+
+        return mountainClimb;
     }
 
     public async Task<MountainClimbSimpleResponse> UpdateMountainClimb(int id, MountainClimbUpdateRequest mountainClimbUpdateRequest)
@@ -146,7 +173,7 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         return mountainClimb.ToSimpleResponseDto();
     }
 
-    public async Task DeleteMountainClimb(int id)
+    public async Task DeleteMountainClimbById(int id)
     {
         var mountainClimb = await _db.MountainClimbs.FindAsync(id) ?? throw new EntityNotFoundException(nameof(MountainClimb), id);
         _db.MountainClimbs.Remove(mountainClimb);
@@ -173,6 +200,14 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         return sprint.ToSimpleResponseDto();
     }
 
+    public async Task<Sprint> GetSprintById(int id)
+    {
+        var sprint = await _db.Sprints.Include(s => s.Stage).SingleOrDefaultAsync(s => s.Id == id)
+            ?? throw new EntityNotFoundException(nameof(Sprint), id);
+
+        return sprint;
+    }
+
     public async Task<SprintSimpleResponse> UpdateSprint(int id, SprintUpdateRequest sprintUpdateRequest)
     {
         var sprint = await _db.Sprints.Include(s => s.Stage).SingleOrDefaultAsync(s => s.Id == id)
@@ -188,7 +223,7 @@ public class RaceEditionManagementService(ILogger<RaceEditionManagementService> 
         return sprint.ToSimpleResponseDto();
     }
 
-    public async Task DeleteSprint(int id)
+    public async Task DeleteSprintById(int id)
     {
         var sprint = await _db.Sprints.FindAsync(id) ?? throw new EntityNotFoundException(nameof(Sprint), id);
         _db.Sprints.Remove(sprint);

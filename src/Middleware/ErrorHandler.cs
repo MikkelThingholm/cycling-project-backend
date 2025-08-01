@@ -14,6 +14,12 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
 {
     private readonly ILogger<GlobalExceptionHandler> _logger = logger;
 
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken = default)
     {
         var errorResponse = new ErrorResponse
@@ -38,7 +44,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         }
 
         context.Response.StatusCode = errorResponse.StatusCode;
-        await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+        await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse, JsonOptions), cancellationToken);
         return true;
     }
 

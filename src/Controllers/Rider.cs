@@ -1,84 +1,72 @@
-using App.EntityModels;
 using Microsoft.AspNetCore.Mvc;
 using App.Data;
-using Microsoft.EntityFrameworkCore;
 using App.Dto;
-using App.Extensions;
+using App.Services.Interfaces;
 
 
 namespace App.Controllers;
 
 [ApiController]
 [Route("api/riders")]
-public class RiderController(ILogger<RiderController> logger, AppDbContext db) : ControllerBase
+public class RiderController(ILogger<RiderController> logger, AppDbContext db, IRiderTeamService riderTeamService) : ControllerBase
 {
 
     private readonly ILogger<RiderController> _logger = logger;
     private readonly AppDbContext _db = db;
+    private readonly IRiderTeamService _riderTeamService = riderTeamService;
 
     [HttpPost]
     public async Task<ActionResult<RiderSimpleResponse>> CreateRider([FromBody] RiderCreateRequest riderCreateRequests)
     {
+        var rider = await _riderTeamService.CreateRider(riderCreateRequests);
 
-
-        Rider riderEntity = riderCreateRequests.ToEntity();
-
-        await _db.Riders.AddAsync(riderEntity);
-
-        await _db.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetRiderById), new { id = riderEntity.Id }, riderEntity.ToResponseDto());
+        return CreatedAtAction(nameof(GetRiderById), new { id = rider.Id }, rider);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<RiderResponse>> GetRiderById([FromRoute] int Id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<RiderResponse>> GetRiderById([FromRoute] int id)
     {
-        Rider? rider = await _db.Riders.Include(rider => rider.Nation)
-                                .FirstOrDefaultAsync(rider => rider.Id == Id);
+        var rider = await _riderTeamService.GetRiderById(id);
 
-        if (rider is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(rider.ToResponseDto());
+        return Ok(rider);
     }
 
     [HttpPut("{id:int}")]
     public async Task<ActionResult<RiderSimpleResponse>> UpdateRiderById([FromRoute] int id, [FromBody] RiderUpdateRequest riderUpdateRequest)
     {
-        Rider? rider = await _db.Riders.FirstOrDefaultAsync(rider => rider.Id == id);
-
-        if (rider is null)
-        {
-            return NotFound();
-        }
-
-        rider.UpdateFromDto(riderUpdateRequest);
-        await _db.SaveChangesAsync();
-        return Ok(rider.ToSimpleResponseDto());
+        var rider = await _riderTeamService.UpdateRider(id, riderUpdateRequest);
+        return Ok(rider);
     }
 
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<RiderResponse>> Delete([FromRoute] int id)
     {
-        _db.Riders.Remove(new() { Id = id });
-
-        try
-        {
-            await _db.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            return NotFound();
-        }
-
+        await _riderTeamService.RemoveRider(id);
 
         return NoContent();
-
     }
 
+    [HttpPost("{riderId:int}/teams/{teamId:int}")]
+    public async Task<ActionResult> AddRiderToTeam([FromRoute] int riderId, [FromRoute] int teamId, [FromBody] RiderTeamCreateRequest riderTeamCreateRequest)
+    {
+        var riderTeam = await _riderTeamService.AssignRiderToTeam(riderId, teamId, riderTeamCreateRequest);
+        return Created((string?)null, riderTeam);
+    }
+
+    [HttpDelete("{riderId:int}/teams/{teamId:int}")]
+    public async Task<ActionResult> RemoveRiderFromTeam([FromRoute] int riderId, [FromRoute] int teamId)
+    {
+        await _riderTeamService.RemoveRiderFromTeam(riderId, teamId);
+        return NoContent();
+    }
+
+    [HttpPut("{riderId:int}/teams/{teamId:int}")]
+    public async Task<ActionResult<RiderTeamSimpleResponse>> UpdateRiderTeamAssignment([FromRoute] int riderId, [FromRoute] int teamId, [FromBody] RiderTeamUpdateRequest riderTeamUpdateRequest)
+    {
+        var riderTeam = await _riderTeamService.UpdateRiderTeamAssignment(riderId, teamId, riderTeamUpdateRequest);
+        return Ok(riderTeam);
+    }
 
 }
 

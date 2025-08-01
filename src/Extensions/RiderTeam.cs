@@ -26,14 +26,14 @@ public static class RiderTeamDtoExtensions
             TeamId: riderTeamEntity.TeamId
         );
     }
-    public static RiderTeam ToEntity(this RiderTeamCreateRequest riderTeamCreateRequest)
+    public static RiderTeam ToEntity(this RiderTeamCreateRequest riderTeamCreateRequest, int riderId, int teamId)
     {
         return new RiderTeam()
         {
             JoinDate = riderTeamCreateRequest.JoinDate,
             LeaveDate = riderTeamCreateRequest.LeaveDate,
-            RiderId = riderTeamCreateRequest.RiderId,
-            TeamId = riderTeamCreateRequest.TeamId
+            RiderId = riderId,
+            TeamId = teamId
         };
     }
 
@@ -41,8 +41,6 @@ public static class RiderTeamDtoExtensions
     {
         riderTeamEntity.JoinDate = riderTeamUpdateRequest.JoinDate;
         riderTeamEntity.LeaveDate = riderTeamUpdateRequest.LeaveDate;
-        riderTeamEntity.RiderId = riderTeamUpdateRequest.RiderId;
-        riderTeamEntity.TeamId = riderTeamUpdateRequest.TeamId;
     }
 
 }

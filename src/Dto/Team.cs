@@ -24,6 +24,5 @@ public record TeamCreateRequest(
 
 public record TeamUpdateRequest(
     string Name,
-    short Year,
     int TeamOrganizationId
 );

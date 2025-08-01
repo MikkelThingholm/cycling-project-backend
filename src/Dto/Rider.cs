@@ -6,8 +6,17 @@ public record RiderResponse(
     string LastName,
     DateOnly BirthDate,
     NationResponse Nation,
-    List<RiderTeamResponse> RiderTeams
+    List<RiderTeamDto> Teams
 );
+
+public record RiderTeamDto(
+    string TeamName,
+    int TeamOrganizationId,
+    short TeamYear,
+    DateOnly JoinDate,
+    DateOnly LeaveDate
+);
+
 
 public record RiderSimpleResponse(
     int Id,
