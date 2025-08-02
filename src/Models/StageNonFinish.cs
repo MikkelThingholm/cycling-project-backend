@@ -1,6 +1,6 @@
 namespace App.EntityModels;
 
-public class StageDidNotStart
+public class StageNonFinish
 {
     public int Id { get; set; }
 
@@ -9,4 +9,13 @@ public class StageDidNotStart
 
     public int RaceRiderParticipationId { get; set; }
     public RaceRiderParticipation RaceRiderParticipation { get; init; } = null!;
+
+    public NonFinishStatus Status { get; set; }
+}
+
+public enum NonFinishStatus
+{
+    DidNotStart = 1,
+    DidNotFinish = 2,
+    Disqualified = 3
 }

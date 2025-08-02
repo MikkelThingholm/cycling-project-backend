@@ -5,8 +5,7 @@ public record StageRiderResultResponse(
     short Placement,
     int FinishTimeMilliseconds,
     StageSimpleResponse Stage,
-    RaceRiderParticipationResponse RaceRiderParticipation,
-    StageResultStatusCodeResponse StageResultStatusCode
+    RaceRiderParticipationResponse RaceRiderParticipation
 );
 
 public record StageRiderResultSimpleResponse(
@@ -14,22 +13,20 @@ public record StageRiderResultSimpleResponse(
     short Placement,
     int FinishTimeMilliseconds,
     int StageId,
-    int RaceRiderParticipationId,
-    int StageFinishStatusCodeId
+    int RaceRiderParticipationId
+
 );
 
 public record StageRiderResultCreateRequest(
     short Placement,
     int FinishTimeMilliseconds,
     int StageId,
-    int RaceRiderParticipationId,
-    int StageFinishStatusCodeId
+    int RaceRiderParticipationId
 );
 
 public record StageRiderResultUpdateRequest(
     short Placement,
     int FinishTimeMilliseconds,
     int StageId,
-    int RaceRiderParticipationId,
-    int StageFinishStatusCodeId
+    int RaceRiderParticipationId
 );

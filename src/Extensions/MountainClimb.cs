@@ -11,7 +11,7 @@ public static class MountainClimbDtoExtension
             Id: mountainClimb.Id,
             ClimbLengthMeter: mountainClimb.ClimbLengthMeters,
             AverageSlope: mountainClimb.AverageSlope,
-            DistanceFromStartMeters: mountainClimb.DistanceFromStartMeter,
+            DistanceFromStartMeters: mountainClimb.DistanceFromStartMeters,
             IsFinish: mountainClimb.IsFinish,
             Mountain: mountainClimb.Mountain.ToResponseDto(),
             Stage: mountainClimb.Stage.ToSimpleResponseDto()
@@ -23,7 +23,7 @@ public static class MountainClimbDtoExtension
             Id: mountainClimb.Id,
             ClimbLengthMeter: mountainClimb.ClimbLengthMeters,
             AverageSlope: mountainClimb.AverageSlope,
-            DistanceFromStartMeters: mountainClimb.DistanceFromStartMeter,
+            DistanceFromStartMeters: mountainClimb.DistanceFromStartMeters,
             IsFinish: mountainClimb.IsFinish,
             MountainId: mountainClimb.MountainId,
             StageId: mountainClimb.StageId
@@ -38,7 +38,7 @@ public static class MountainClimbDtoExtension
             StageId = mountainClimbCreateRequest.StageId,
             ClimbLengthMeters = mountainClimbCreateRequest.ClimbLengthMeter,
             AverageSlope = mountainClimbCreateRequest.AverageSlope,
-            DistanceFromStartMeter = mountainClimbCreateRequest.DistanceFromStartMeters,
+            DistanceFromStartMeters = mountainClimbCreateRequest.DistanceFromStartMeters,
             IsFinish = mountainClimbCreateRequest.IsFinish
         };
     }
@@ -49,7 +49,7 @@ public static class MountainClimbDtoExtension
         mountainClimbEntity.StageId = mountainClimbUpdateRequest.StageId;
         mountainClimbEntity.ClimbLengthMeters = mountainClimbUpdateRequest.ClimbLengthMeter;
         mountainClimbEntity.AverageSlope = mountainClimbUpdateRequest.AverageSlope;
-        mountainClimbEntity.DistanceFromStartMeter = mountainClimbUpdateRequest.DistanceFromStartMeters;
+        mountainClimbEntity.DistanceFromStartMeters = mountainClimbUpdateRequest.DistanceFromStartMeters;
         mountainClimbEntity.IsFinish = mountainClimbUpdateRequest.IsFinish;
     }
 

@@ -15,7 +15,7 @@ public static class StageDtoExtensions
             Date: stage.Date,
             DistanceMeters: stage.DistanceMeters,
             RaceEdition: stage.RaceEdition.ToSimpleResponseDto(),
-            StageType: stage.StageType.ToResponseDto(),
+            StageType: stage.StageType,
             Sprints: [.. stage.Sprints.Select(s => s.ToSimpleResponseDto())],
             MountainClimbs: [.. stage.MountainClimbs.Select(m => m.ToSimpleResponseDto())],
             StageTeamResults: [.. stage.StageTeamResults.Select(str => str.ToSimpleResponseDto())],
@@ -33,7 +33,7 @@ public static class StageDtoExtensions
             Date: stage.Date,
             DistanceMeters: stage.DistanceMeters,
             RaceEditionId: stage.RaceEditionId,
-            StageTypeId: stage.StageTypeId
+            StageType: stage.StageType
         );
     }
 
@@ -47,7 +47,7 @@ public static class StageDtoExtensions
             Date = stageCreateRequest.Date,
             DistanceMeters = stageCreateRequest.DistanceMeters,
             RaceEditionId = stageCreateRequest.RaceEditionId,
-            StageTypeId = stageCreateRequest.StageTypeId
+            StageType = stageCreateRequest.StageType
         };
     }
 
@@ -59,6 +59,6 @@ public static class StageDtoExtensions
         stageEntity.Date = stageUpdateRequest.Date;
         stageEntity.DistanceMeters = stageUpdateRequest.DistanceMeters;
         stageEntity.RaceEditionId = stageUpdateRequest.RaceEditionId;
-        stageEntity.StageTypeId = stageUpdateRequest.StageTypeId;
+        stageEntity.StageType = stageUpdateRequest.StageType;
     }
 }

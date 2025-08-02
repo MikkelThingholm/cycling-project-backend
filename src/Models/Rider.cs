@@ -6,8 +6,8 @@ public class Rider
     public int Id { get; set; }
 
     public string FirstName { get; set; } = null!;
-
     public string LastName { get; set; } = null!;
+    public string Slug { get; set; } = null!;
 
     public int NationId { get; set; }
     public Nation Nation { get; set; } = null!;

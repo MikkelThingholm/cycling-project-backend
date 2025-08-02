@@ -15,6 +15,4 @@ public class StageRiderResult
     public int FinishTimeMilliseconds { get; set; }
 
     public int StageFinishStatusCodeId { get; set; }
-    public StageResultStatusCode StageResultStatusCode { get; set; } = null!;
-
 }

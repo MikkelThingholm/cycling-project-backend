@@ -12,8 +12,7 @@ public static class StageRiderResultDtoExtensions
             Placement: stageRiderResult.Placement,
             FinishTimeMilliseconds: stageRiderResult.FinishTimeMilliseconds,
             Stage: stageRiderResult.Stage.ToSimpleResponseDto(),
-            RaceRiderParticipation: stageRiderResult.RaceRiderParticipation.ToResponseDto(),
-            StageResultStatusCode: stageRiderResult.StageResultStatusCode.ToResponseDto()
+            RaceRiderParticipation: stageRiderResult.RaceRiderParticipation.ToResponseDto()
         );
     }
 
@@ -24,8 +23,7 @@ public static class StageRiderResultDtoExtensions
             Placement: stageRiderResult.Placement,
             FinishTimeMilliseconds: stageRiderResult.FinishTimeMilliseconds,
             StageId: stageRiderResult.StageId,
-            RaceRiderParticipationId: stageRiderResult.RaceRiderParticipationId,
-            StageFinishStatusCodeId: stageRiderResult.StageFinishStatusCodeId
+            RaceRiderParticipationId: stageRiderResult.RaceRiderParticipationId
         );
     }
 
@@ -36,8 +34,7 @@ public static class StageRiderResultDtoExtensions
             Placement = stageRiderResultCreateRequest.Placement,
             FinishTimeMilliseconds = stageRiderResultCreateRequest.FinishTimeMilliseconds,
             StageId = stageRiderResultCreateRequest.StageId,
-            RaceRiderParticipationId = stageRiderResultCreateRequest.RaceRiderParticipationId,
-            StageFinishStatusCodeId = stageRiderResultCreateRequest.StageFinishStatusCodeId
+            RaceRiderParticipationId = stageRiderResultCreateRequest.RaceRiderParticipationId
         };
     }
 
@@ -47,6 +44,5 @@ public static class StageRiderResultDtoExtensions
         stageRiderResultEntity.FinishTimeMilliseconds = stageRiderResultUpdateRequest.FinishTimeMilliseconds;
         stageRiderResultEntity.StageId = stageRiderResultUpdateRequest.StageId;
         stageRiderResultEntity.RaceRiderParticipationId = stageRiderResultUpdateRequest.RaceRiderParticipationId;
-        stageRiderResultEntity.StageFinishStatusCodeId = stageRiderResultUpdateRequest.StageFinishStatusCodeId;
     }
 }

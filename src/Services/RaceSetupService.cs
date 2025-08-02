@@ -111,7 +111,7 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db)
         {
             throw new BusinessRuleViolationException($"Stage distance {stageUpdateRequest.DistanceMeters} must be greater than all Sprints");
         }
-        if (!stage.MountainClimbs.All(mc => mc.DistanceFromStartMeter <= stageUpdateRequest.DistanceMeters))
+        if (!stage.MountainClimbs.All(mc => mc.DistanceFromStartMeters <= stageUpdateRequest.DistanceMeters))
         {
             throw new BusinessRuleViolationException($"Stage distance {stageUpdateRequest.DistanceMeters} must be greater than all Mountain Climbs");
         }
@@ -140,9 +140,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db)
         var stage = await _db.Stages.FindAsync(mountainClimb.StageId)
             ?? throw new EntityNotFoundException(nameof(Stage), mountainClimb.StageId);
 
-        if (!(0 < mountainClimb.DistanceFromStartMeter && mountainClimb.DistanceFromStartMeter <= stage.DistanceMeters))
+        if (!(0 < mountainClimb.DistanceFromStartMeters && mountainClimb.DistanceFromStartMeters <= stage.DistanceMeters))
         {
-            throw new BusinessRuleViolationException($"Mountain climb distance {mountainClimb.DistanceFromStartMeter} must be between 0 and stage distance {stage.DistanceMeters}");
+            throw new BusinessRuleViolationException($"Mountain climb distance {mountainClimb.DistanceFromStartMeters} must be between 0 and stage distance {stage.DistanceMeters}");
         }
 
         _db.MountainClimbs.Add(mountainClimb);

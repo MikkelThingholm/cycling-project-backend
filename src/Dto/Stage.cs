@@ -1,3 +1,5 @@
+using App.EntityModels;
+
 namespace App.Dto;
 
 public record StageResponse(
@@ -8,7 +10,7 @@ public record StageResponse(
     DateOnly Date,
     int DistanceMeters,
     RaceEditionSimpleResponse RaceEdition,
-    StageTypeResponse StageType,
+    StageType StageType,
     List<SprintSimpleResponse> Sprints,
     List<MountainClimbSimpleResponse> MountainClimbs,
     List<StageTeamResultSimpleResponse> StageTeamResults,
@@ -23,7 +25,7 @@ public record StageSimpleResponse(
     DateOnly Date,
     int DistanceMeters,
     int RaceEditionId,
-    int StageTypeId
+    StageType StageType
 );
 
 public record StageCreateRequest(
@@ -33,7 +35,7 @@ public record StageCreateRequest(
     DateOnly Date,
     int DistanceMeters,
     int RaceEditionId,
-    int StageTypeId
+    StageType StageType
 );
 
 public record StageUpdateRequest(
@@ -43,5 +45,5 @@ public record StageUpdateRequest(
     DateOnly Date,
     int DistanceMeters,
     int RaceEditionId,
-    int StageTypeId
+    StageType StageType
 );

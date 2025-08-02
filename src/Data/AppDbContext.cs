@@ -19,13 +19,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<SprintResult> SprintResults { get; set; }
     public DbSet<Stage> Stages { get; set; }
     public DbSet<StageCombativityAward> StageCombativeAwards { get; set; }
-    public DbSet<StageDidNotStart> StageDidNotStart { get; set; }
-    public DbSet<StageResultStatusCode> StageResultStatusCodes { get; set; }
+    public DbSet<StageNonFinish> StageDidNotStart { get; set; }
     public DbSet<StageRiderResult> StageRiderResults { get; set; }
     public DbSet<StageRiderStanding> StageRiderStandings { get; set; }
     public DbSet<StageTeamResult> StageTeamResults { get; set; }
     public DbSet<StageTeamStanding> StageTeamStandings { get; set; }
-    public DbSet<StageType> StageTypes { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<TeamOrganization> TeamOrganizations { get; set; }
 

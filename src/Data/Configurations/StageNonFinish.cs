@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace App.Data.Configurations;
 
-public class StageDidNotStartConfiguration : IEntityTypeConfiguration<StageDidNotStart>
+public class StageDidNotStartConfiguration : IEntityTypeConfiguration<StageNonFinish>
 {
-    public void Configure(EntityTypeBuilder<StageDidNotStart> builder)
+    public void Configure(EntityTypeBuilder<StageNonFinish> builder)
     {
-        builder.ToTable("stage_did_not_starts");
+        builder.ToTable("stage_non_finishes");
 
         builder.HasIndex(x => new { x.StageId, x.RaceRiderParticipationId }).IsUnique();
     }

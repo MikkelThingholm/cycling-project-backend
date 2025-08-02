@@ -18,13 +18,22 @@ public class Stage
 
     public int DistanceMeters { get; set; }
 
-    public int StageTypeId { get; set; }
-    public StageType StageType { get; init; } = null!;
-
+    public StageType StageType { get; set; }
 
     public ICollection<StageTeamResult> StageTeamResults { get; set; } = [];
     public ICollection<StageRiderResult> StageRiderResults { get; set; } = [];
     public ICollection<Sprint> Sprints { get; set; } = [];
     public ICollection<MountainClimb> MountainClimbs { get; set; } = [];
+}
 
+public enum StageType
+{
+    Flat = 1,
+    Hilly = 2,
+    MediumMountains = 3,
+    Mountains = 4,
+    IndividualTimeTrial = 5,
+    TeamTimeTrial = 6,
+    IndividualMountainTimeTrial = 7,
+    Cobblestone = 8
 }
