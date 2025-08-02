@@ -11,7 +11,9 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
         builder.ToTable("teams");
 
         builder.Property(x => x.Name).HasMaxLength(256);
+        builder.Property(x => x.Slug).HasMaxLength(256);
 
         builder.HasIndex(x => new { x.TeamOrganizationId, x.Year }).IsUnique();
+        builder.HasIndex(x => x.Slug).IsUnique();
     }
 }

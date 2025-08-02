@@ -11,8 +11,10 @@ public class MountainConfiguration : IEntityTypeConfiguration<Mountain>
         builder.ToTable("mountains");
 
         builder.Property(x => x.Name).HasMaxLength(256);
+        builder.Property(x => x.Slug).HasMaxLength(256);
 
         builder.HasIndex(x => x.Name).IsUnique();
+        builder.HasIndex(x => x.Slug).IsUnique();
 
     }
 }

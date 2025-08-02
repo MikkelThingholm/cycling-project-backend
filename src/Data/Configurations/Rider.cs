@@ -12,7 +12,8 @@ public class RiderConfiguration : IEntityTypeConfiguration<Rider>
 
         builder.Property(r => r.FirstName).HasMaxLength(256);
         builder.Property(r => r.LastName).HasMaxLength(256);
+        builder.Property(r => r.Slug).HasMaxLength(256);
 
-
+        builder.HasIndex(r => r.Slug).IsUnique();
     }
 }

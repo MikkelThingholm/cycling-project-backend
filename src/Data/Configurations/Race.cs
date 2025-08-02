@@ -11,7 +11,9 @@ public class RaceConfiguration : IEntityTypeConfiguration<Race>
         builder.ToTable("races");
 
         builder.Property(r => r.Name).HasMaxLength(256);
+        builder.Property(r => r.Slug).HasMaxLength(256);
 
         builder.HasIndex(r => r.Name).IsUnique();
+        builder.HasIndex(r => r.Slug).IsUnique();
     }
 }
