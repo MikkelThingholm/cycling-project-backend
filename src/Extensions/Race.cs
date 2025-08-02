@@ -10,8 +10,9 @@ public static class RaceDtoExtension
         return new RaceResponse(
             Id: race.Id,
             Name: race.Name,
+            Slug: race.Slug,
             Nation: race.Nation.ToResponseDto(),
-            RaceEditions: null!
+            RaceEditions: [.. race.RaceEditions.Select(re => re.ToResponseDto())]
         );
     }
 
@@ -20,6 +21,7 @@ public static class RaceDtoExtension
         return new RaceSimpleResponse(
             Id: race.Id,
             Name: race.Name,
+            Slug: race.Slug,
             NationId: race.NationId
         );
     }
@@ -29,6 +31,7 @@ public static class RaceDtoExtension
         return new Race()
         {
             Name = raceCreateRequest.Name,
+            Slug = raceCreateRequest.Slug,
             NationId = raceCreateRequest.NationId
         };
     }
@@ -36,6 +39,7 @@ public static class RaceDtoExtension
     public static void UpdateFromDto(this Race raceEntity, RaceUpdateRequest raceUpdateRequest)
     {
         raceEntity.Name = raceUpdateRequest.Name;
+        raceEntity.Slug = raceUpdateRequest.Slug;
         raceEntity.NationId = raceUpdateRequest.NationId;
     }
 

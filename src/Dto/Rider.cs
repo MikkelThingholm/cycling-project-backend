@@ -4,6 +4,7 @@ public record RiderResponse(
     int Id,
     string FirstName,
     string LastName,
+    string Slug,
     DateOnly BirthDate,
     NationResponse Nation,
     List<RiderTeamDto> Teams
@@ -22,6 +23,7 @@ public record RiderSimpleResponse(
     int Id,
     string FirstName,
     string LastName,
+    string Slug,
     DateOnly BirthDate,
     int NationId
 );
@@ -29,6 +31,7 @@ public record RiderSimpleResponse(
 public record RiderCreateRequest(
     string FirstName,
     string LastName,
+    string Slug,
     int NationId,
     DateOnly BirthDate
 );
@@ -36,6 +39,7 @@ public record RiderCreateRequest(
 public record RiderUpdateRequest(
     string FirstName,
     string LastName,
+    string Slug,
     int NationId,
     DateOnly BirthDate
 );

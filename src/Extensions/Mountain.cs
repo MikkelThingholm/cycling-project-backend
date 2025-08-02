@@ -9,7 +9,8 @@ public static class MountainDtoExtension
     {
         return new MountainResponse(
             Id: mountain.Id,
-            Name: mountain.Name
+            Name: mountain.Name,
+            Slug: mountain.Slug
         );
     }
 
@@ -17,12 +18,14 @@ public static class MountainDtoExtension
     {
         return new Mountain()
         {
-            Name = mountainCreateRequest.Name
+            Name = mountainCreateRequest.Name,
+            Slug = mountainCreateRequest.Slug
         };
     }
 
     public static void UpdateFromDto(this Mountain mountainEntity, MountainUpdateRequest mountainUpdateRequest)
     {
         mountainEntity.Name = mountainUpdateRequest.Name;
+        mountainEntity.Slug = mountainUpdateRequest.Slug;
     }
 }

@@ -11,6 +11,7 @@ public static class TeamDtoExtensions
             Id: team.Id,
             Name: team.Name,
             Year: team.Year,
+            Slug: team.Slug,
             RiderTeams: [.. team.RiderTeams.Select(rt => rt.ToResponseDto())],
             TeamOrganization: team.TeamOrganization.ToResponseDto()
         );
@@ -21,6 +22,7 @@ public static class TeamDtoExtensions
         return new TeamSimpleResponse(
             Id: team.Id,
             Name: team.Name,
+            Slug: team.Slug,
             Year: team.Year,
             TeamOrganizationId: team.TeamOrganizationId
         );
@@ -32,6 +34,7 @@ public static class TeamDtoExtensions
         {
             Name = request.Name,
             Year = request.Year,
+            Slug = request.Slug,
             TeamOrganizationId = request.TeamOrganizationId
         };
     }
@@ -39,6 +42,7 @@ public static class TeamDtoExtensions
     public static void UpdateFromDto(this Team team, TeamUpdateRequest request)
     {
         team.Name = request.Name;
+        team.Slug = request.Slug;
         team.TeamOrganizationId = request.TeamOrganizationId;
     }
 
