@@ -4,81 +4,57 @@ using App.Data;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
 using App.Extensions;
+using App.Services.Interfaces;
 
 
 namespace App.Controllers;
 
 [ApiController]
 [Route("api/races")]
-public class RaceController(ILogger<RaceController> logger, AppDbContext db) : ControllerBase
+public class RaceController(ILogger<RaceController> logger, IRaceSetupService raceSetupService, IRaceQueryService raceQueryService) : ControllerBase
 {
 
     private readonly ILogger<RaceController> _logger = logger;
-    private readonly AppDbContext _db = db;
+    private readonly IRaceSetupService _raceSetupService = raceSetupService;
+    private readonly IRaceQueryService _raceQueryService = raceQueryService;
 
     [HttpPost]
     public async Task<ActionResult<RaceSimpleResponse>> CreateRace([FromBody] RaceCreateRequest raceCreateRequest)
     {
-
-
-        var raceEntity = raceCreateRequest.ToEntity();
-
-        await _db.Races.AddAsync(raceEntity);
-
-        await _db.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetRaceById), new { id = raceEntity.Id }, raceEntity.ToSimpleResponseDto());
+        var race = await _raceSetupService.CreateRace(raceCreateRequest);
+        return CreatedAtAction(nameof(GetRace), new { slug = race.Slug }, race);
     }
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<RaceResponse>> GetRaceById([FromRoute] int id)
+    [HttpGet("{slug}")]
+    public async Task<ActionResult<RaceResponse>> GetRace([FromRoute] string slug)
     {
 
-        var raceEntity = await _db.Races.Include(race => race.Nation)
-                                .FirstOrDefaultAsync(race => race.Id == id);
+        var race = await _raceQueryService.GetRaceBySlug(slug);
 
-        if (raceEntity is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(raceEntity.ToResponseDto());
+        return Ok(race.ToResponseDto());
     }
 
-    [HttpPut("{id:int}")]
-    public async Task<ActionResult<RaceSimpleResponse>> UpdateRaceById([FromRoute] int id, [FromBody] RaceUpdateRequest raceUpdateRequest)
+    [HttpPut("{slug}")]
+    public async Task<ActionResult<RaceSimpleResponse>> UpdateRace([FromRoute] string slug, [FromBody] RaceUpdateRequest raceUpdateRequest)
     {
-        var raceEntity = await _db.Races.FirstOrDefaultAsync(race => race.Id == id);
-
-        if (raceEntity is null)
-        {
-            return NotFound();
-        }
-
-        raceEntity.UpdateFromDto(raceUpdateRequest);
-        await _db.SaveChangesAsync();
-        return Ok(raceEntity.ToSimpleResponseDto());
+        var race = await _raceSetupService.UpdateRace(slug, raceUpdateRequest);
+        return Ok(race);
     }
 
 
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteRaceById([FromRoute] int id)
+    [HttpDelete("{slug}")]
+    public async Task<ActionResult> DeleteRace([FromRoute] string slug)
     {
-        _db.Races.Remove(new() { Id = id });
-
-        try
-        {
-            await _db.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            return NotFound();
-        }
-
+        await _raceSetupService.DeleteRace(slug);
         return NoContent();
     }
 
+    [HttpPost("{slug}/race-editions")]
+    public async Task<ActionResult<RaceEditionSimpleResponse>> CreateRaceEdition([FromRoute] string slug, [FromBody] RaceEditionCreateRequest raceEditionCreateRequest)
+    {
+        var raceEdition = await _raceSetupService.CreateRaceEdition(raceEditionCreateRequest);
 
-
+        return Created((string?)null, raceEdition);
+    }
 }
 

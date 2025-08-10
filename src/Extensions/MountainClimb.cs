@@ -35,7 +35,6 @@ public static class MountainClimbDtoExtension
         return new MountainClimb()
         {
             MountainId = mountainClimbCreateRequest.MountainId,
-            StageId = mountainClimbCreateRequest.StageId,
             ClimbLengthMeters = mountainClimbCreateRequest.ClimbLengthMeter,
             AverageSlope = mountainClimbCreateRequest.AverageSlope,
             DistanceFromStartMeters = mountainClimbCreateRequest.DistanceFromStartMeters,

@@ -41,6 +41,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddScoped<IRaceEntryService, RaceEntryService>();
 builder.Services.AddScoped<IRiderTeamService, RiderTeamService>();
 builder.Services.AddScoped<IRaceSetupService, RaceSetupService>();
+builder.Services.AddScoped<IRaceQueryService, RaceQueryService>();
 
 var app = builder.Build();
 

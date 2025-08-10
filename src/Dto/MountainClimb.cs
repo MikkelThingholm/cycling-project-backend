@@ -22,7 +22,6 @@ public record MountainClimbSimpleResponse(
 
 public record MountainClimbCreateRequest(
     int MountainId,
-    int StageId,
     int ClimbLengthMeter,
     float AverageSlope,
     int DistanceFromStartMeters,
