@@ -25,35 +25,33 @@ public class RaceController(ILogger<RaceController> logger, IRaceSetupService ra
         return CreatedAtAction(nameof(GetRace), new { slug = race.Slug }, race);
     }
 
-    [HttpGet("{slug}")]
-    public async Task<ActionResult<RaceResponse>> GetRace([FromRoute] string slug)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<RaceResponse>> GetRace([FromRoute] int id)
     {
 
-        var race = await _raceQueryService.GetRaceBySlug(slug);
+        var race = await _raceQueryService.GetRaceById(id);
 
         return Ok(race.ToResponseDto());
     }
 
-    [HttpPut("{slug}")]
-    public async Task<ActionResult<RaceSimpleResponse>> UpdateRace([FromRoute] string slug, [FromBody] RaceUpdateRequest raceUpdateRequest)
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<RaceSimpleResponse>> UpdateRace([FromRoute] int id, [FromBody] RaceUpdateRequest raceUpdateRequest)
     {
-        var race = await _raceSetupService.UpdateRace(slug, raceUpdateRequest);
+        var race = await _raceSetupService.UpdateRace(id, raceUpdateRequest);
         return Ok(race);
     }
 
-
-    [HttpDelete("{slug}")]
-    public async Task<ActionResult> DeleteRace([FromRoute] string slug)
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteRace([FromRoute] int id)
     {
-        await _raceSetupService.DeleteRace(slug);
+        await _raceSetupService.DeleteRace(id);
         return NoContent();
     }
 
-    [HttpPost("{slug}/race-editions")]
-    public async Task<ActionResult<RaceEditionSimpleResponse>> CreateRaceEdition([FromRoute] string slug, [FromBody] RaceEditionCreateRequest raceEditionCreateRequest)
+    [HttpPost("{id:int}/race-editions")]
+    public async Task<ActionResult<RaceEditionSimpleResponse>> CreateRaceEdition([FromRoute] int id, [FromBody] RaceEditionCreateRequest raceEditionCreateRequest)
     {
-        var raceEdition = await _raceSetupService.CreateRaceEdition(raceEditionCreateRequest);
-
+        var raceEdition = await _raceSetupService.CreateRaceEdition(id, raceEditionCreateRequest);
         return Created((string?)null, raceEdition);
     }
 }

@@ -24,8 +24,7 @@ public record RaceEditionCreateRequest(
     string Name,
     short Year,
     DateOnly StartDate,
-    DateOnly EndDate,
-    int RaceId
+    DateOnly EndDate
 );
 
 public record RaceEditionUpdateRequest(

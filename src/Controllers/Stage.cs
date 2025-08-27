@@ -18,89 +18,40 @@ public class StageController(ILogger<StageController> logger, IRaceSetupService 
     private readonly IRaceSetupService _raceSetupService = raceSetupService;
     private readonly IRaceQueryService _raceQueryService = raceQueryService;
 
-    [HttpPost]
-    public async Task<ActionResult<StageSimpleResponse>> CreateStage([FromRoute] int raceEditionId, StageCreateRequest stageCreateRequest)
-    {
-        var stage = await _raceSetupService.CreateStage(stageCreateRequest);
-        return Created((string?)null, stage);
-    }
 
-
-    [HttpGet("{slug}")]
-    public async Task<ActionResult<StageResponse>> GetStageBySlug([FromRoute] string slug)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<StageResponse>> GetStage([FromRoute] int id)
     {
-        var stage = await _raceQueryService.GetStageBySlug(slug);
+        var stage = await _raceQueryService.GetStageById(id);
         return Ok(stage.ToResponseDto());
     }
 
-
-    [HttpPut("{slug}")]
-    public async Task<ActionResult<StageSimpleResponse>> UpdateStage([FromRoute] string slug, StageUpdateRequest stageUpdateRequest)
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<StageSimpleResponse>> UpdateStage([FromRoute] int id, StageUpdateRequest stageUpdateRequest)
     {
-        var stage = await _raceSetupService.UpdateStage(slug, stageUpdateRequest);
+        var stage = await _raceSetupService.UpdateStage(id, stageUpdateRequest);
         return Ok(stage);
     }
 
-
-    [HttpDelete("{slug}")]
-    public async Task<ActionResult> DeleteStage([FromRoute] string slug)
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteStage([FromRoute] int id)
     {
-        await _raceSetupService.DeleteStage(slug);
+        await _raceSetupService.DeleteStage(id);
         return NoContent();
     }
 
-    [HttpPost("{slug}/mountain-climbs")]
-    public async Task<ActionResult<MountainClimbSimpleResponse>> CreateMountainClimb([FromRoute] string slug, MountainClimbCreateRequest mountainClimbCreateRequest)
+    [HttpPost("{id:int}/mountain-climbs")]
+    public async Task<ActionResult<MountainClimbSimpleResponse>> CreateMountainClimb([FromRoute] int id, MountainClimbCreateRequest mountainClimbCreateRequest)
     {
-        var mountainClimb = await _raceSetupService.CreateMountainClimb(slug, mountainClimbCreateRequest);
+        var mountainClimb = await _raceSetupService.CreateMountainClimb(id, mountainClimbCreateRequest);
         return Created((string?)null, mountainClimb);
     }
 
-    [HttpGet("{slug}/mountain-climbs/{mountainClimbNumber:int}")]
-    public async Task<ActionResult<MountainClimbResponse>> GetMountainClimb([FromRoute] string slug, [FromRoute] int mountainClimbNumber)
+    [HttpPost("{id:int}/sprints")]
+    public async Task<ActionResult<SprintSimpleResponse>> CreateSprint([FromRoute] int id, SprintCreateRequest sprintCreateRequest)
     {
-        var mountainClimb = await _raceQueryService.GetMountainClimbBySlug(slug, mountainClimbNumber);
-        return Ok(mountainClimb.ToResponseDto());
-    }
-
-    [HttpPut("{slug}/mountain-climbs/{mountainClimbNumber:int}")]
-    public async Task<ActionResult<MountainClimbSimpleResponse>> UpdateMountainClimb([FromRoute] string slug, [FromRoute] int mountainClimbNumber, MountainClimbUpdateRequest mountainClimbUpdateRequest)
-    {
-        var mountainClimb = await _raceSetupService.UpdateMountainClimb(slug, mountainClimbNumber, mountainClimbUpdateRequest);
-        return Ok(mountainClimb);
-    }
-    [HttpDelete("{slug}/mountain-climbs/{mountainClimbNumber:int}")]
-    public async Task<ActionResult> DeleteMountainClimb([FromRoute] string slug, [FromRoute] int mountainClimbNumber)
-    {
-        await _raceSetupService.DeleteMountainClimb(slug, mountainClimbNumber);
-        return NoContent();
-    }
-
-
-    [HttpPost("{slug}/sprints")]
-    public async Task<ActionResult<SprintSimpleResponse>> CreateSprint([FromRoute] string slug, SprintCreateRequest sprintCreateRequest)
-    {
-        var sprint = await _raceSetupService.CreateSprint(sprintCreateRequest);
+        var sprint = await _raceSetupService.CreateSprint(id, sprintCreateRequest);
         return Created((string?)null, sprint);
-    }
-
-    [HttpGet("{slug}/sprints/{sprintNumber:int}")]
-    public async Task<ActionResult<SprintResponse>> GetSprint([FromRoute] string slug, [FromRoute] int sprintNumber)
-    {
-        var sprint = await _raceQueryService.GetSprintBySlug(slug, sprintNumber);
-        return Ok(sprint.ToResponseDto());
-    }
-    [HttpPut("{slug}/sprints/{sprintNumber:int}")]
-    public async Task<ActionResult<SprintSimpleResponse>> UpdateSprint([FromRoute] string slug, [FromRoute] int sprintNumber, SprintUpdateRequest sprintUpdateRequest)
-    {
-        var sprint = await _raceSetupService.UpdateSprint(slug, sprintNumber, sprintUpdateRequest);
-        return Ok(sprint);
-    }
-    [HttpDelete("{slug}/sprints/{sprintNumber:int}")]
-    public async Task<ActionResult> DeleteSprint([FromRoute] string slug, [FromRoute] int sprintNumber)
-    {
-        await _raceSetupService.DeleteSprint(slug, sprintNumber);
-        return NoContent();
     }
 
 }

@@ -18,34 +18,33 @@ public class RaceEditionController(ILogger<RaceEditionController> logger, IRaceS
     private readonly IRaceSetupService _raceSetupService = raceSetupService;
     private readonly IRaceQueryService _raceQueryService = raceQueryService;
 
-    [HttpPost]
-    public async Task<ActionResult<RaceEditionSimpleResponse>> CreateRaceEdition([FromBody] RaceEditionCreateRequest raceEditionCreateRequest)
-    {
-        var raceEdition = await _raceSetupService.CreateRaceEdition(raceEditionCreateRequest);
 
-        return Created((string?)null, raceEdition);
-    }
-
-    [HttpGet("{slug}")]
-    public async Task<ActionResult<RaceEditionResponse>> GetRaceEdition([FromRoute] string slug)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<RaceEditionResponse>> GetRaceEdition([FromRoute] int id)
     {
-        var raceEdition = await _raceQueryService.GetRaceEditionBySlug(slug);
+        var raceEdition = await _raceQueryService.GetRaceEditionById(id);
         return Ok(raceEdition.ToResponseDto());
     }
 
-    [HttpPut("{slug}")]
-    public async Task<ActionResult<RaceEditionSimpleResponse>> UpdateRaceEdition([FromRoute] string slug, [FromBody] RaceEditionUpdateRequest raceEditionUpdateRequest)
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<RaceEditionSimpleResponse>> UpdateRaceEdition([FromRoute] int id, [FromBody] RaceEditionUpdateRequest raceEditionUpdateRequest)
     {
-        var raceEdition = await _raceSetupService.UpdateRaceEdition(slug, raceEditionUpdateRequest);
+        var raceEdition = await _raceSetupService.UpdateRaceEdition(id, raceEditionUpdateRequest);
         return Ok(raceEdition);
     }
 
-
-    [HttpDelete("{slug}")]
-    public async Task<ActionResult> DeleteRaceEditionById([FromRoute] string slug)
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteRaceEditionById([FromRoute] int id)
     {
-        await _raceSetupService.DeleteRaceEdition(slug);
+        await _raceSetupService.DeleteRaceEdition(id);
         return NoContent();
+    }
+
+    [HttpPost("{id:int}/stages")]
+    public async Task<ActionResult<StageSimpleResponse>> CreateStage([FromRoute] int id, StageCreateRequest stageCreateRequest)
+    {
+        var stage = await _raceSetupService.CreateStage(id, stageCreateRequest);
+        return Created((string?)null, stage);
     }
 
 }

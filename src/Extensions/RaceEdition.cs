@@ -29,7 +29,7 @@ public static class RaceEditionDtoExtension
         );
     }
 
-    public static RaceEdition ToEntity(this RaceEditionCreateRequest raceEditionCreateRequest)
+    public static RaceEdition ToEntity(this RaceEditionCreateRequest raceEditionCreateRequest, int raceId)
     {
         return new RaceEdition()
         {
@@ -37,7 +37,7 @@ public static class RaceEditionDtoExtension
             Year = raceEditionCreateRequest.Year,
             StartDate = raceEditionCreateRequest.StartDate,
             EndDate = raceEditionCreateRequest.EndDate,
-            RaceId = raceEditionCreateRequest.RaceId
+            RaceId = raceId
         };
     }
 

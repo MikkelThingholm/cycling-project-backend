@@ -1,6 +1,6 @@
 namespace App.EntityModels;
 
-public class StageRiderResult
+public class StageRiderMountainResult
 {
     public int Id { get; set; }
 
@@ -10,7 +10,8 @@ public class StageRiderResult
     public int RaceRiderParticipationId { get; set; }
     public RaceRiderParticipation RaceRiderParticipation { get; init; } = null!;
 
-    public short Placement { get; set; }
-    public int FinishTimeMilliseconds { get; set; }
-    public int
+    public int Placement { get; set; }
+
+    public int MountainPoints { get; set; }
+    public short MountainPointsPenalty { get; set; }
 }

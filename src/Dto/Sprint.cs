@@ -20,8 +20,7 @@ public record SprintSimpleResponse(
 public record SprintCreateRequest(
     string Name,
     int DistanceFromStartMeters,
-    bool IsFinish,
-    int StageId
+    bool IsFinish
 );
 
 public record SprintUpdateRequest(

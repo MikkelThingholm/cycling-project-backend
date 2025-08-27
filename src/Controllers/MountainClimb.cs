@@ -4,78 +4,31 @@ using App.Data;
 using Microsoft.EntityFrameworkCore;
 using App.Dto;
 using App.Extensions;
+using App.Services.Interfaces;
 
 
 namespace App.Controllers;
 
 [ApiController]
 [Route("api/mountain-climbs")]
-public class MountainClimbController(ILogger<MountainClimbController> logger, AppDbContext db) : ControllerBase
+public class MountainClimbController(ILogger<MountainClimbController> logger, IRaceSetupService raceSetupService) : ControllerBase
 {
 
     private readonly ILogger<MountainClimbController> _logger = logger;
-    private readonly AppDbContext _db = db;
 
-    [HttpPost]
-    public async Task<ActionResult<MountainClimbSimpleResponse>> CreateMountainClimb([FromBody] MountainClimbCreateRequest mountainClimbCreateRequest)
-    {
-
-
-        var mountainClimbEntity = mountainClimbCreateRequest.ToEntity();
-
-        await _db.MountainClimbs.AddAsync(mountainClimbEntity);
-
-        await _db.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetMountainClimbById), new { id = mountainClimbEntity.Id }, mountainClimbEntity.ToSimpleResponseDto());
-    }
-
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<MountainClimbResponse>> GetMountainClimbById([FromRoute] int id)
-    {
-
-        var mountainClimb = await _db.MountainClimbs.Include(mountainClimb => mountainClimb.Mountain)
-                                .Include(mountainClimb => mountainClimb.Stage)
-                                .FirstOrDefaultAsync(mountainClimb => mountainClimb.Id == id);
-
-        if (mountainClimb is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(mountainClimb.ToResponseDto());
-    }
+    private readonly IRaceSetupService _raceSetupService = raceSetupService;
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<MountainClimbSimpleResponse>> UpdateMountainClimbById([FromRoute] int id, [FromBody] MountainClimbUpdateRequest mountainClimbUpdateRequest)
+    public async Task<ActionResult<MountainClimbSimpleResponse>> UpdateMountainClimb([FromRoute] int id, [FromRoute] int mountainClimbNumber, MountainClimbUpdateRequest mountainClimbUpdateRequest)
     {
-        MountainClimb? mountainClimb = await _db.MountainClimbs.FirstOrDefaultAsync(mountain => mountain.Id == id);
-
-        if (mountainClimb is null)
-        {
-            return NotFound();
-        }
-
-        mountainClimb.UpdateFromDto(mountainClimbUpdateRequest);
-        await _db.SaveChangesAsync();
-        return Ok(mountainClimb.ToSimpleResponseDto());
+        var mountainClimb = await _raceSetupService.UpdateMountainClimb(id, mountainClimbUpdateRequest);
+        return Ok(mountainClimb);
     }
 
-
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult<MountainClimbResponse>> DeleteMountainClimbById([FromRoute] int id)
+    public async Task<ActionResult> DeleteMountainClimb([FromRoute] int id)
     {
-        _db.MountainClimbs.Remove(new() { Id = id });
-
-        try
-        {
-            await _db.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            return NotFound();
-        }
-
+        await _raceSetupService.DeleteMountainClimb(id);
         return NoContent();
     }
 

@@ -30,7 +30,7 @@ public static class MountainClimbDtoExtension
         );
     }
 
-    public static MountainClimb ToEntity(this MountainClimbCreateRequest mountainClimbCreateRequest)
+    public static MountainClimb ToEntity(this MountainClimbCreateRequest mountainClimbCreateRequest, int stageId)
     {
         return new MountainClimb()
         {
@@ -38,7 +38,8 @@ public static class MountainClimbDtoExtension
             ClimbLengthMeters = mountainClimbCreateRequest.ClimbLengthMeter,
             AverageSlope = mountainClimbCreateRequest.AverageSlope,
             DistanceFromStartMeters = mountainClimbCreateRequest.DistanceFromStartMeters,
-            IsFinish = mountainClimbCreateRequest.IsFinish
+            IsFinish = mountainClimbCreateRequest.IsFinish,
+            StageId = stageId
         };
     }
 

@@ -24,18 +24,18 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
         return race.ToSimpleResponseDto();
     }
 
-    public async Task<RaceSimpleResponse> UpdateRace(string raceSlug, RaceUpdateRequest raceUpdateRequest)
+    public async Task<RaceSimpleResponse> UpdateRace(int raceId, RaceUpdateRequest raceUpdateRequest)
     {
-        var race = await _raceQueryService.GetRaceBySlug(raceSlug);
+        var race = await _raceQueryService.GetRaceById(raceId);
 
         race.UpdateFromDto(raceUpdateRequest);
         await _db.SaveChangesAsync();
         return race.ToSimpleResponseDto();
     }
 
-    public async Task DeleteRace(string raceSlug)
+    public async Task DeleteRace(int raceId)
     {
-        var race = await _raceQueryService.GetRaceBySlug(raceSlug);
+        var race = await _raceQueryService.GetRaceById(raceId);
         _db.Races.Remove(race);
         await _db.SaveChangesAsync();
     }
@@ -50,9 +50,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
         }
     }
 
-    public async Task<RaceEditionSimpleResponse> CreateRaceEdition(RaceEditionCreateRequest raceEditionCreateRequest)
+    public async Task<RaceEditionSimpleResponse> CreateRaceEdition(int raceId, RaceEditionCreateRequest raceEditionCreateRequest)
     {
-        var raceEdition = raceEditionCreateRequest.ToEntity();
+        var raceEdition = raceEditionCreateRequest.ToEntity(raceId);
 
         ValidateRaceEditionDates(raceEdition.Year, raceEdition.StartDate, raceEdition.EndDate);
 
@@ -62,9 +62,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
     }
 
 
-    public async Task<RaceEditionSimpleResponse> UpdateRaceEdition(string raceEditionSlug, RaceEditionUpdateRequest raceEditionUpdateRequest)
+    public async Task<RaceEditionSimpleResponse> UpdateRaceEdition(int raceEditionId, RaceEditionUpdateRequest raceEditionUpdateRequest)
     {
-        var raceEdition = await _raceQueryService.GetRaceEditionBySlug(raceEditionSlug);
+        var raceEdition = await _raceQueryService.GetRaceEditionById(raceEditionId);
 
         ValidateRaceEditionDates(raceEditionUpdateRequest.Year, raceEditionUpdateRequest.StartDate, raceEditionUpdateRequest.EndDate);
 
@@ -79,9 +79,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
         return raceEdition.ToSimpleResponseDto();
     }
 
-    public async Task DeleteRaceEdition(string slug)
+    public async Task DeleteRaceEdition(int raceEditionId)
     {
-        var raceEdition = await _raceQueryService.GetRaceEditionBySlug(slug);
+        var raceEdition = await _raceQueryService.GetRaceEditionById(raceEditionId);
 
         _db.RaceEditions.Remove(raceEdition);
         await _db.SaveChangesAsync();
@@ -90,9 +90,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
 
     // Stages
 
-    public async Task<StageSimpleResponse> CreateStage(StageCreateRequest stageCreateRequest)
+    public async Task<StageSimpleResponse> CreateStage(int raceEditionId, StageCreateRequest stageCreateRequest)
     {
-        var stage = stageCreateRequest.ToEntity();
+        var stage = stageCreateRequest.ToEntity(raceEditionId);
 
         var raceEdition = await _db.RaceEditions.FindAsync(stage.RaceEditionId)
             ?? throw new EntityNotFoundException(nameof(RaceEdition), stage.RaceEditionId);
@@ -108,9 +108,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
     }
 
 
-    public async Task<StageSimpleResponse> UpdateStage(string stageSlug, StageUpdateRequest stageUpdateRequest)
+    public async Task<StageSimpleResponse> UpdateStage(int stageId, StageUpdateRequest stageUpdateRequest)
     {
-        var stage = await _raceQueryService.GetStageBySlug(stageSlug);
+        var stage = await _raceQueryService.GetStageById(stageId);
 
         if (!(stage.RaceEdition.StartDate <= stageUpdateRequest.Date && stageUpdateRequest.Date <= stage.RaceEdition.EndDate))
         {
@@ -132,10 +132,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
         return stage.ToSimpleResponseDto();
     }
 
-    public async Task DeleteStage(string stageSlug)
+    public async Task DeleteStage(int stageId)
     {
-
-        var stage = await _raceQueryService.GetStageBySlug(stageSlug);
+        var stage = await _raceQueryService.GetStageById(stageId);
         _db.Stages.Remove(stage);
         await _db.SaveChangesAsync();
     }
@@ -143,13 +142,11 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
 
     // MountainClimbs
 
-    public async Task<MountainClimbSimpleResponse> CreateMountainClimb(string stageSlug, MountainClimbCreateRequest mountainClimbCreateRequest)
+    public async Task<MountainClimbSimpleResponse> CreateMountainClimb(int stageId, MountainClimbCreateRequest mountainClimbCreateRequest)
     {
-        var mountainClimb = mountainClimbCreateRequest.ToEntity();
+        var mountainClimb = mountainClimbCreateRequest.ToEntity(stageId);
 
-        var stage = await _raceQueryService.GetStageBySlug(stageSlug);
-
-        mountainClimb.StageId = stage.Id;
+        var stage = await _raceQueryService.GetStageById(stageId);
 
         if (!(0 < mountainClimb.DistanceFromStartMeters && mountainClimb.DistanceFromStartMeters <= stage.DistanceMeters))
         {
@@ -162,9 +159,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
     }
 
 
-    public async Task<MountainClimbSimpleResponse> UpdateMountainClimb(string stageSlug, int mountainClimbNumber, MountainClimbUpdateRequest mountainClimbUpdateRequest)
+    public async Task<MountainClimbSimpleResponse> UpdateMountainClimb(int mountainClimbId, MountainClimbUpdateRequest mountainClimbUpdateRequest)
     {
-        var mountainClimb = await _raceQueryService.GetMountainClimbBySlug(stageSlug, mountainClimbNumber);
+        var mountainClimb = await _raceQueryService.GetMountainClimbById(mountainClimbId);
 
         if (!(0 < mountainClimbUpdateRequest.DistanceFromStartMeters && mountainClimbUpdateRequest.DistanceFromStartMeters <= mountainClimb.Stage.DistanceMeters))
         {
@@ -176,21 +173,20 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
         return mountainClimb.ToSimpleResponseDto();
     }
 
-    public async Task DeleteMountainClimb(string stageSlug, int mountainClimbNumber)
+    public async Task DeleteMountainClimb(int mountainClimbId)
     {
-        var mountainClimb = await _raceQueryService.GetMountainClimbBySlug(stageSlug, mountainClimbNumber);
+        var mountainClimb = await _raceQueryService.GetMountainClimbById(mountainClimbId);
         _db.MountainClimbs.Remove(mountainClimb);
         await _db.SaveChangesAsync();
     }
 
     // Sprints
 
-    public async Task<SprintSimpleResponse> CreateSprint(SprintCreateRequest sprintCreateRequest)
+    public async Task<SprintSimpleResponse> CreateSprint(int stageId, SprintCreateRequest sprintCreateRequest)
     {
-        var sprint = sprintCreateRequest.ToEntity();
+        var sprint = sprintCreateRequest.ToEntity(stageId);
 
-        var stage = await _db.Stages.FindAsync(sprint.StageId)
-            ?? throw new EntityNotFoundException(nameof(Stage), sprint.StageId);
+        var stage = await _raceQueryService.GetStageById(stageId);
 
         if (!(0 < sprint.DistanceFromStartMeters && sprint.DistanceFromStartMeters <= stage.DistanceMeters))
         {
@@ -203,9 +199,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
     }
 
 
-    public async Task<SprintSimpleResponse> UpdateSprint(string stageSlug, int sprintNumber, SprintUpdateRequest sprintUpdateRequest)
+    public async Task<SprintSimpleResponse> UpdateSprint(int sprintId, SprintUpdateRequest sprintUpdateRequest)
     {
-        var sprint = await _raceQueryService.GetSprintBySlug(stageSlug, sprintNumber);
+        var sprint = await _raceQueryService.GetSprintById(sprintId);
         if (!(0 < sprintUpdateRequest.DistanceFromStartMeters && sprintUpdateRequest.DistanceFromStartMeters <= sprint.Stage.DistanceMeters))
         {
             throw new BusinessRuleViolationException($"Sprint distance {sprintUpdateRequest.DistanceFromStartMeters} must be between 0 and stage distance {sprint.Stage.DistanceMeters}");
@@ -216,9 +212,9 @@ public class RaceSetupService(ILogger<RaceSetupService> logger, AppDbContext db,
         return sprint.ToSimpleResponseDto();
     }
 
-    public async Task DeleteSprint(string stageSlug, int sprintNumber)
+    public async Task DeleteSprint(int sprintId)
     {
-        var sprint = await _raceQueryService.GetSprintBySlug(stageSlug, sprintNumber);
+        var sprint = await _raceQueryService.GetSprintById(sprintId);
         _db.Sprints.Remove(sprint);
         await _db.SaveChangesAsync();
     }

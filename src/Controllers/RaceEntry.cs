@@ -18,9 +18,9 @@ public class RaceEntryController(ILogger<RaceEntryController> logger, IRaceEntry
 
 
     [HttpPost("teams")]
-    public async Task<ActionResult> TeamRaceEntry([FromBody] RaceTeamParticipationCreateRequest request)
+    public async Task<ActionResult> TeamRaceEntry([FromRoute] int raceEditionId, [FromBody] RaceTeamParticipationCreateRequest request)
     {
-        await _raceEntryService.TeamRaceEntry(request.TeamId, request.RaceEditionId);
+        await _raceEntryService.TeamRaceEntry(request.TeamId, raceEditionId);
         return Created();
     }
 

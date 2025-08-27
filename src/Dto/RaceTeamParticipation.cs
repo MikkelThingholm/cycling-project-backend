@@ -15,7 +15,6 @@ public record RaceTeamParticipationSimpleResponse(
 );
 
 public record RaceTeamParticipationCreateRequest(
-    int RaceEditionId,
     int TeamId
 );
 

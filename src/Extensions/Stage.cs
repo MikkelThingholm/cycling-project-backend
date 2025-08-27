@@ -37,7 +37,7 @@ public static class StageDtoExtensions
         );
     }
 
-    public static Stage ToEntity(this StageCreateRequest stageCreateRequest)
+    public static Stage ToEntity(this StageCreateRequest stageCreateRequest, int raceEditionId)
     {
         return new Stage()
         {
@@ -46,7 +46,7 @@ public static class StageDtoExtensions
             FinishLocation = stageCreateRequest.FinishLocation,
             Date = stageCreateRequest.Date,
             DistanceMeters = stageCreateRequest.DistanceMeters,
-            RaceEditionId = stageCreateRequest.RaceEditionId,
+            RaceEditionId = raceEditionId,
             StageType = stageCreateRequest.StageType
         };
     }

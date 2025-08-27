@@ -28,12 +28,12 @@ public static class SprintDtoExtensions
         );
     }
 
-    public static Sprint ToEntity(this SprintCreateRequest sprintCreateRequest)
+    public static Sprint ToEntity(this SprintCreateRequest sprintCreateRequest, int stageId)
     {
         return new Sprint()
         {
             Name = sprintCreateRequest.Name,
-            StageId = sprintCreateRequest.StageId,
+            StageId = stageId,
             DistanceFromStartMeters = sprintCreateRequest.DistanceFromStartMeters,
             IsFinish = sprintCreateRequest.IsFinish
         };

@@ -34,7 +34,6 @@ public record StageCreateRequest(
     string FinishLocation,
     DateOnly Date,
     int DistanceMeters,
-    int RaceEditionId,
     StageType StageType
 );
 

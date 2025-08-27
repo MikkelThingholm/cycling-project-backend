@@ -29,7 +29,6 @@ public static class RaceTeamParticipationDtoExtension
     {
         return new RaceTeamParticipation()
         {
-            RaceEditionId = request.RaceEditionId,
             TeamId = request.TeamId
         };
     }
